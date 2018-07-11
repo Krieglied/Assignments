@@ -19,7 +19,7 @@ int main(void)
 	}
 
 	char quote[] = "I've\nhurt\nyou,\nand\nI\nwish\nto\ngo\non\nhurting\nyou.\n";
-	for(int i=0;i < 43; i++)
+	for(int i=0;i < 48; i++)
 	{
 		printf("%c",quote[i]);
 	}
