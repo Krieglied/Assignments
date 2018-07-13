@@ -21,6 +21,6 @@ int main(void)
 	printf("%f\n", y != 3 != x >= x);
 	x=9; y=3;
 	//(y %= y) || (x /= x--)
-	printf("%d\n", (y % y) || (x / x - 1);
+	printf("%d\n", (y % y) || (x / x - 1));
 	return 0;
 }
