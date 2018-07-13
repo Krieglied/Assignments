@@ -13,11 +13,14 @@
 int main(void)
 {
 	int y = 4;
+	//1 + 2 *(3 + y) +5
 	printf("%d\n", 1+ 6 +2*y +5);
 	int x = 2;
 	y = 6;
-	printf("%f\n", x!=y!=3>=x);
+	// x != y != 3 >= x
+	printf("%f\n", 1 != 1);
 	x=9; y=3;
-	printf("%d\n", (y%=y)||(x/=x--));
+	//(y %= y) || (x /= x--)
+	printf("%d\n", 0 || ( 1 - 1));
 	return 0;
 }
