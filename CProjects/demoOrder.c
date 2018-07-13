@@ -18,7 +18,7 @@ int main(void)
 	int x = 2;
 	y = 6;
 	// x != y != 3 >= x
-	printf("%f\n", y != 3 != x >= x);
+	printf("%d\n", y != 3 != x >= x);
 	x=9; y=3;
 	//(y %= y) || (x /= x--)
 	printf("%d\n", (y % y) || (x / x - 1));
