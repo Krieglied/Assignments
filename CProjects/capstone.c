@@ -23,12 +23,12 @@ int main(void)
 	randNumber = rand();
 	do
 	{
-		printf("Which position would you like to bit flip? Maximum length is (%u): ", sizeof(randNumber) * 8);
+		printf("Which position would you like to bit flip? Maximum length is (%u), minium is 1: ", sizeof(randNumber) * 8);
 		scanf("%d", &position);
 	}
-	while(position < 0 || position > (sizeof(randNumber) * 8));
+	while(position <= 0 || position > (sizeof(randNumber) * 8));
 	printf("The original number is %08X\n", randNumber);
-	bitMask = pow(2, position);
+	bitMask = pow(2, position - 1);
 	randNumber = randNumber ^ bitMask;
 	printf("The new number is %08X\n", randNumber);
 	return 0;
