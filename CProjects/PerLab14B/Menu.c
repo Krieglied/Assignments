@@ -9,11 +9,30 @@ struct Student
 	struct Student * next_node;
 };
 
-void print_student(struct Student * list)
+void print_student(struct Student * list, int action)
 {
-	print_initials(list);
-	print_artist(list);
-	print_car(list);
+	printf("Which student would you like to print? (Select number from 0 to %d\n", sizeof(list));
+	int input = 99;
+	char * buffer[INT_BUFF_SIZE];
+	fgets(buffer, INT_BUFF_SIZE, stdin);
+	while (fgetc(stdin) != '\n');
+	input = atoi(buffer);
+	for (int i = 0; i < input; i++)
+	{
+		list = list->next_node;
+	}
+	switch (action) 
+	{
+	case INITIALS:
+		print_initials(list);
+		break;
+	case ARTIST:
+		print_artist(list);
+		break;
+	case CAR:
+		print_car(list);
+		break;
+	}	
 }
 void print_initials(struct Student * list)
 {
@@ -29,7 +48,7 @@ void print_car(struct Student * list)
 }
 void print_all_students(struct Student * list)
 {
-	print_student(list);
+	print_student(list, ALL);
 	if (list->next_node != NULL)
 	{
 		print_all_students(list->next_node);

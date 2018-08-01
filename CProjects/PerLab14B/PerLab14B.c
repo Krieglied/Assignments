@@ -23,7 +23,7 @@ int main(void)
 	while (fgetc(stdin) != '\n');
 	input = atoi(buffer);
 
-	if (input == 0)
+	if (input == INPUT_STUDENTS)
 	{
 		do
 		{
@@ -35,7 +35,7 @@ int main(void)
 			input = atoi(buffer);
 		} while (input);
 	}
-	else if (input == 1)
+	else if (input == HARDCODE)
 	{
 		//Grab the hardcoded list of valuess
 		listofStudents = hardcode_student();
@@ -62,47 +62,49 @@ int main(void)
 		input = atoi(buffer);
 		switch (input)
 		{
-		case 1:
-			printf("PRINT STUDENT\n");
-			print_student(currentStudent);
+		case ALL:
+			printf("PRINT STUDENT\n\n");
+			print_student(currentStudent, ALL);
+			printf("\n");
 			break;
-		case 2:
-			printf("PRINT INITALS\n");
-			print_initials(currentStudent);
+		case INITIALS:
+			printf("PRINT INITALS\n\n");
+			print_initials(currentStudent, INITIALS);
+			printf("\n");
 			break;
-		case 3:
-			printf("PRINT ARTIST\n");
-			print_artist(currentStudent);
+		case ARTIST:
+			printf("PRINT ARTIST\n\n");
+			print_artist(currentStudent, ARTIST);
+			printf("\n");
 			break;
-		case 4:
-			printf("PRINT CAR\n");
-			print_car(currentStudent);
+		case CAR:
+			printf("PRINT CAR\n\n");
+			print_car(currentStudent, CAR);
+			printf("\n");
 			break;
-		case 5:
-			printf("PRINT ALL STUDENTS\n");
+		case ALL_STUDENTS:
+			printf("PRINT ALL STUDENTS\n\n");
 			print_all_students(currentStudent);
+			printf("\n");
 			break;
-		case 6:
-			printf("PRINT ALL INITIALS\n");
+		case ALL_INITIALS:
+			printf("PRINT ALL INITIALS\n\n");
 			print_all_initals(currentStudent);
+			printf("\n");
 			break;
-		case 7:
-			printf("PRINT ALL ARTISTS\n");
+		case ALL_ARTISTS:
+			printf("PRINT ALL ARTISTS\n\n");
 			print_all_artists(currentStudent);
+			printf("\n");
 			break;
-		case 8:
+		case ALL_CARS:
 			printf("PRINT ALL CARS\n");
 			print_all_cars(currentStudent);
+			printf("\n");
 			break;
 		default:
 			break;
 		}
-	}while (input != 9);
+	}while (input != EXIT);
 	return 0;
 }
-
-/*if (!(strchr(temp, '\n')))
-{
-	printf("Too many characters \n");
-	while (fgetc(stdin) != '\n');
-}*/
