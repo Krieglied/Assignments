@@ -1,10 +1,11 @@
 #include "Students.h"
+#include "Students.h"
 
-void print_student();
-void print_all_students();
-void print_all_initals();
-void print_all_artists();
-void print_all_cars();
-void print_initials();
-void print_artist();
-void print_car();
+void print_student(struct Student * list);
+void print_initials(struct Student * list);
+void print_artist(struct Student * list);
+void print_car(struct Student * list);
+void print_all_students(struct Student * list);
+void print_all_initals(struct Student * list);
+void print_all_artists(struct Student * list);
+void print_all_cars(struct Student * list);

@@ -1,6 +1,7 @@
 #include "Students.h"
+#include "UserInput.h"
+#include "Menu.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#define INITIAL_BUFF_SIZE 4
-#define BUFF_SIZE 256
+#define INT_BUFF_SIZE 2
