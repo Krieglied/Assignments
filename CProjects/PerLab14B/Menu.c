@@ -3,17 +3,17 @@
 
 struct Student
 {
-	char * student_initials;
-	char * artist;
-	char * car;
+	char student_initials[256];
+	char artist[256];
+	char car[256];
 	struct Student * next_node;
 };
 
 void print_student(struct Student * list)
 {
-	print_initials(&list);
-	print_artist(&list);
-	print_car(&list);
+	print_initials(list);
+	print_artist(list);
+	print_car(list);
 }
 void print_initials(struct Student * list)
 {
@@ -29,7 +29,7 @@ void print_car(struct Student * list)
 }
 void print_all_students(struct Student * list)
 {
-	print_student(&list);
+	print_student(list);
 	if (list->next_node != NULL)
 	{
 		print_all_students(list->next_node);
@@ -37,7 +37,7 @@ void print_all_students(struct Student * list)
 }
 void print_all_initals(struct Student * list)
 {
-	print_initials(&list);
+	print_initials(list);
 	if (list->next_node != NULL)
 	{
 		print_all_initals(list->next_node);
@@ -45,7 +45,7 @@ void print_all_initals(struct Student * list)
 }
 void print_all_artists(struct Student * list)
 {
-	print_all_artists(&list);
+	print_artist(list);
 	if (list->next_node != NULL)
 	{
 		print_all_artists(list->next_node);
@@ -53,7 +53,7 @@ void print_all_artists(struct Student * list)
 }
 void print_all_cars(struct Student * list)
 {
-	print_all_cars(&list);
+	print_car(list);
 	if (list->next_node != NULL)
 	{
 		print_all_cars(list->next_node);

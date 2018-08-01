@@ -6,7 +6,7 @@
 
 struct Student
 {
-	char student_initials[4];
+	char student_initials[256];
 	char artist[256];
 	char car[256];
 	struct Student * next_node;
@@ -14,7 +14,7 @@ struct Student
 
 int main(void)
 {
-	struct Student * listofStudents;
+	struct Student * listofStudents = (struct Student*)malloc(sizeof(struct Student));
 	//Inital user input to select manual input or to use precoded values
 	printf("Would you like to input students (press 0) or use hardcoded values (press 1): ");
 	int input = 99;
@@ -44,46 +44,55 @@ int main(void)
 	{
 		printf("Your selection was in ERROR.");
 	}
+	//struct Student * currentStudent = (struct Student*)malloc(sizeof(struct Student));
 	struct Student * currentStudent = listofStudents;
 	do {
-		printf("Please the menu option you wish to execute (Enter the number for the option): ");
-		printf("Print a student's information (1): ");
-		printf("Print a student's initals (2): ");
-		printf("Print a student's favorite artist (3): ");
-		printf("Print a student's favorite car (4): ");
-		printf("Print all students' information (5): ");
-		printf("Print all initials (6): ");
-		printf("Print all artists (7): ");
-		printf("Print all cars (8): ");
-		printf("Exit(9): ");
+		printf("Please the menu option you wish to execute (Enter the number for the option): \n");
+		printf("Print a student's information (1): \n");
+		printf("Print a student's initals (2): \n");
+		printf("Print a student's favorite artist (3): \n");
+		printf("Print a student's favorite car (4): \n");
+		printf("Print all students' information (5): \n");
+		printf("Print all initials (6): \n");
+		printf("Print all artists (7): \n");
+		printf("Print all cars (8): \n");
+		printf("Exit(9): \n");
 		fgets(buffer, INT_BUFF_SIZE, stdin);
 		while (fgetc(stdin) != '\n');
 		input = atoi(buffer);
 		switch (input)
 		{
 		case 1:
-			print_student(&currentStudent);
+			printf("PRINT STUDENT\n");
+			print_student(currentStudent);
 			break;
 		case 2:
-			print_student(&currentStudent);
+			printf("PRINT INITALS\n");
+			print_initials(currentStudent);
 			break;
 		case 3:
-			print_student(&currentStudent);
+			printf("PRINT ARTIST\n");
+			print_artist(currentStudent);
 			break;
 		case 4:
-			print_student(&currentStudent);
+			printf("PRINT CAR\n");
+			print_car(currentStudent);
 			break;
 		case 5:
-			print_all_students(&currentStudent);
+			printf("PRINT ALL STUDENTS\n");
+			print_all_students(currentStudent);
 			break;
 		case 6:
-			print_all_initals(&currentStudent);
+			printf("PRINT ALL INITIALS\n");
+			print_all_initals(currentStudent);
 			break;
 		case 7:
-			print_all_artists(&currentStudent);
+			printf("PRINT ALL ARTISTS\n");
+			print_all_artists(currentStudent);
 			break;
 		case 8:
-			print_all_cars(&currentStudent);
+			printf("PRINT ALL CARS\n");
+			print_all_cars(currentStudent);
 			break;
 		default:
 			break;

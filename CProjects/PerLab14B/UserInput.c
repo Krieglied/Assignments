@@ -1,13 +1,17 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include "UserInput.h"
 #include "Students.h"
+
+
 
 //This explicit struct declaration is required, as trying to just use the header file results
 //in an incomplete type error
 struct Student
 {
-	char * student_initials;
-	char * artist;
-	char * car;
+	char student_initials[256];
+	char artist[256];
+	char car[256];
 	struct Student * next_node;
 };
 
@@ -36,6 +40,12 @@ struct Student * input_student(struct Student * list)
 //If the user doesn't want to input students, use these hardcoded values
 struct Student * hardcode_student(void)
 {
+	struct Student * student0 = (struct Student*)malloc(sizeof(struct Student));
+	struct Student * student1 = (struct Student*)malloc(sizeof(struct Student));
+	struct Student * student2 = (struct Student*)malloc(sizeof(struct Student));
+	struct Student * student3 = (struct Student*)malloc(sizeof(struct Student));
+	struct Student * student4 = (struct Student*)malloc(sizeof(struct Student));
+
 	char initials0[] = { "abc" };
 	char initials1[] = { "daf" };
 	char initials2[] = { "rjg" };
@@ -54,12 +64,30 @@ struct Student * hardcode_student(void)
 	char car_value3[] = { "Porsche" };
 	char car_value4[] = { "Mustang" };
 
-	struct Student student4 = { &initials4 , &artist_value4 , &car_value4, NULL};
-	struct Student student3 = { &initials3 , &artist_value3 , &car_value3, &student4 };
-	struct Student student2 = { &initials2 , &artist_value2 , &car_value2, &student3 };
-	struct Student student1 = { &initials1 , &artist_value1 , &car_value1, &student2 };
-	struct Student student0 = { &initials0 , &artist_value0 , &car_value0, &student1 };
+	strcpy(student0->student_initials, initials0);
+	strcpy(student1->student_initials, initials1);
+	strcpy(student2->student_initials, initials2);
+	strcpy(student3->student_initials, initials3);
+	strcpy(student4->student_initials, initials4);
+
+	strcpy(student0->artist, artist_value0);
+	strcpy(student1->artist, artist_value1);
+	strcpy(student2->artist, artist_value2);
+	strcpy(student3->artist, artist_value3);
+	strcpy(student4->artist, artist_value4);
+
+	strcpy(student0->car, car_value0);
+	strcpy(student1->car, car_value1);
+	strcpy(student2->car, car_value2);
+	strcpy(student3->car, car_value3);
+	strcpy(student4->car, car_value4);
+
+	student4->next_node = NULL;
+	student3->next_node = student4;
+	student2->next_node = student3;
+	student1->next_node = student2;
+	student0->next_node = student1;
 	
-	struct Student * listofStudents = &student0;
+	struct Student * listofStudents = student0;
 	return listofStudents;
 }
