@@ -1,7 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#include "Students.h"
-
 //Declaration of all the print functions
 void print_student(struct Student * list);
 void print_initials(struct Student * list);
