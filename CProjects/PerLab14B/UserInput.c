@@ -1,5 +1,4 @@
 #include "UserInput.h"
-#include "Students.h"
 
 //This explicit struct declaration is required, as trying to just use the header file results
 //in an incomplete type error
