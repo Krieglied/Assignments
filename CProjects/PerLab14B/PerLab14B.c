@@ -16,6 +16,10 @@ struct Student
 
 int main(void)
 {
+	clock_t start, end;
+	double cpu_time_used;
+	
+
 	//This is the list of students
 	struct Student * listofStudents = (struct Student*)malloc(sizeof(struct Student));
 	//These are the default value for the list
@@ -45,8 +49,12 @@ int main(void)
 	}
 	else if (input == HARDCODE)
 	{
+		start = clock();
 		//Grab the hardcoded list of valuess
 		listofStudents = hardcode_student();
+		end = clock();
+		cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+		printf("The program ran in %lf seconds for the hardcode function\n", cpu_time_used);
 	}
 	else
 	{
@@ -108,63 +116,103 @@ int main(void)
 		{
 			//Prints the all information for the specified student
 		case ALL:
+			start = clock();
 			printf("PRINT STUDENT\n\n");
 			print_student(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print student function\n\n", cpu_time_used);
 			break;
 			//Prints the initials for the specified student
 		case INITIALS:
+			start = clock();
 			printf("PRINT INITALS\n\n");
 			print_initials(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print initials function\n\n", cpu_time_used);
 			break;
 			//Prints the artist for the specified student
 		case ARTIST:
+			start = clock();
 			printf("PRINT ARTIST\n\n");
 			print_artist(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print artist function\n\n", cpu_time_used);
 			break;
 			//Prints the car for the specified student
 		case CAR:
+			start = clock();
 			printf("PRINT CAR\n\n");
 			print_car(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print car function\n\n", cpu_time_used);
 			break;
 			//Prints the all information for all the students
 		case ALL_STUDENTS:
+			start = clock();
 			printf("PRINT ALL STUDENTS\n\n");
 			print_all_students(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print all student function\n\n", cpu_time_used);
 			break;
 			//Prints the initials for all the students
 		case ALL_INITIALS:
+			start = clock();
 			printf("PRINT ALL INITIALS\n\n");
 			print_all_initals(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print all initials function\n\n", cpu_time_used);
 			break;
 			//Prints the artists for all the students
 		case ALL_ARTISTS:
+			start = clock();
 			printf("PRINT ALL ARTISTS\n\n");
 			print_all_artists(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print all artists function\n\n", cpu_time_used);
 			break;
 			//Prints the cars for all the students
 		case ALL_CARS:
+			start = clock();
 			printf("PRINT ALL CARS\n\n");
 			print_all_cars(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the print all cars function\n\n", cpu_time_used);
 			break;
 			//Deletes the last element of the list
 		case DELETE_END:
+			start = clock();
 			printf("DELETING THE END STUDENT\n\n");
 			delete_end(currentStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the delete end student function\n\n", cpu_time_used);
 			break;
 			//Deletes the specified element from the list
 		case DELETE_STUDENT:
+			start = clock();
 			printf("DELETE A STUDENT\n\n");
 			delete_student(currentStudent, previousStudent);
 			printf("\n");
+			end = clock();
+			cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("The program ran in %lf seconds for the delete student function\n\n", cpu_time_used);
 			break;
 		default:
 			break;
