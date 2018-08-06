@@ -1,3 +1,7 @@
+//Performance Lab CPP 1A
+//Robert John Graham III
+//August 5, 2018
+
 /*
 CPP: Lab 1
 
