@@ -39,18 +39,22 @@ int main()
 //Return value: the greatest common denominator of two numbers 
 int gcd(const int a, const int b)
 {
+	//If either number is 0, return 0
 	if(a == 0 || b == 0)
 	{
 		return 0;
 	}
+	//If they are equal, then a divides itself
 	if(a == b)
 	{
 		return a;
 	}
+	//If a > b, try the solution again, making a smaller
 	if(a > b)
 	{
 		return gcd(a - b, b);
 	}
+	//Otherwise, its as small as can be
 	return gcd(a, b - a);
 }
 
@@ -60,15 +64,18 @@ int gcd(const int a, const int b)
 int phi(unsigned int n)
 {
 	int counter = 0;
+	//If the number inputted is 1, then return 1
 	if(n == 1)
 	{
 		return 1;
 	}
+	//Else, check all numbers between 1 and n to see if their gcd is 1
 	for(int i = 1; i < n; i++)
 	{
 		int result = gcd(i, n);
 		if(result == 1)
 		{
+			//Each one that has a gcd of 1 with n, increment the counter
 			counter++;
 		}
 	}
