@@ -68,7 +68,7 @@ void print_queue(const std::list<std::string>& queue)
 }
 int count_word(std::list<std::string>::iterator& it)
 {
-	int count = 0;
+	int count = 1;
 	bool match = true;
 	while(match)
 	{
