@@ -70,6 +70,7 @@ int main()
 			find_word(word, output);
 		}
 	}
+	file.close();
 	//The map is moved to set, sorting it by the value and then the key, higher values to lower values
 	std::set<std::pair<std::string, int>, comp> set(output.begin(), output.end());
 	for (const auto& item : set)

@@ -1,4 +1,4 @@
-//Bonus Lab Decode Portion
+//Bonus Lab Encode
 //Robert John Graham III
 //August 9, 2018
 
@@ -9,7 +9,7 @@
 int main()
 {
 	//Input text file
-	std::ifstream file("encodedText.txt");
+	std::ifstream file("textInput.txt");
 	std::string line;
 	std::string input;
 	if (file.is_open())
@@ -19,13 +19,17 @@ int main()
 		{
 			for(const auto& item : line)
 			{
-				input += (char)(item - 3);
+				input += (char)(item + 3);
 			}
-			input += "\n";
+			input += '\n';
 		}
 	}
-	std::cout << input;
 	file.close();
-	while (true);
+	std::ofstream encodedfile("encodedText.txt");
+	if(encodedfile.is_open())
+	{
+		encodedfile << input;
+		encodedfile.close();
+	}
 	return 0;
 }
