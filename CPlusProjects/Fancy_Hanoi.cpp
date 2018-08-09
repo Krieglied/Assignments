@@ -14,7 +14,7 @@ int Setup(struct Tower& tower, int discs);
 void Hanoi(struct Tower& source, struct Tower& dest, struct Tower& temp, int n);
 void display(struct Tower& tower);
 void display_towers(struct Tower& source, struct Tower& dest, struct Tower& temp);
-static unsigned long long numMoves = 0;
+static uint128_t numMoves = 0;
 
 struct Tower
 {
