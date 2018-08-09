@@ -11,7 +11,7 @@
 int Setup(std::stack<int>& tower, int n);
 void Hanoi(std::stack<int>& source, std::stack<int>& dest, std::stack<int>&, int n);
 void display(std::stack<int> tower);
-static unsigned long long numMoves = 0;
+static uint128_t numMoves = 0;
 
 int main()
 {
