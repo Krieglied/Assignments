@@ -11,7 +11,7 @@
 int Setup(std::stack<int>& tower, int n);
 void Hanoi(std::stack<int>& source, std::stack<int>& dest, std::stack<int>&, int n);
 void display(std::stack<int> tower);
-static int numMoves = 0;
+static unsigned int numMoves = 0;
 
 int main()
 {
@@ -54,10 +54,10 @@ int main()
 //Arguments: std::stack<int>& towerA - a stack container that will be setup with a number of discs 
 //           int n - a number that represents the number of discs to load on to the tower stack
 //Return     the number of discs that were loaded on to the tower 
-//Functionality: Load a number of discs in ascending order on to the stack 
+//Functionality: Load a number of discs in descending order on to the stack 
 int Setup(std::stack<int>& tower, int discs)
 {
-	for (int i = 0; i < discs; i++)
+	for (int i = discs; i > 0; i--)
 	{
 		tower.emplace(i);
 	}
