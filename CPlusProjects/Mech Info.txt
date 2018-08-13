@@ -18,15 +18,43 @@ Mad Dog 60-tons
 	
 Summoner 70-tons
 	Autocannon
+	LRM
+	ER PPC
 
 Timber Wolf 75-tons
-	Machine Guns
+	ER Large Laser
+	ER Large Laser
+	ER Medium Laser
+	ER Medium Laser
+	Medium Pulse Laser
+	LRM
+	LRM
+	Machine Gun
+	Machine Gun
 	
 Warhammer 80-tons
+	ER PPC
+	ER PPC
+	Medium Pulse Laser
+	Medium Pulse Laser
+	Medium Pulse Laser
+	Medium Pulse Laser
+	Medium Pulse Laser
 	SRM
 	
 Kodiak 100-tons
 	AC20
+	ER Large Laser
+	SRM
+	SRM
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
 	
 Stone Rhino 100-tons
 	Gauss Rifle
@@ -36,4 +64,11 @@ Stone Rhino 100-tons
 	Small Pulse Laser
 	
 Mauler 90-tons
-	Large Laser
+	ER Large Laser
+	ER Large Laser
+	LRM
+	LRM
+	Autocannon
+	Autocannon
+	Autocannon
+	Autocannon
