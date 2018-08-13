@@ -1,5 +1,3 @@
-Battletech Mech Info
-
 Hellbringer 65-tons
 	PPC
 	
