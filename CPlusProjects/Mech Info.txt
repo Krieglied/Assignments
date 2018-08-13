@@ -1,8 +1,20 @@
 Hellbringer 65-tons
-	PPC
+	ER PPCs
+	ER PPCs
+	ER Medium Laser
+	ER Medium Laser
+	ER Medium Laser
+	SRM
+	Machine Gun
+	Machine Gun
 	
 Mad Dog 60-tons
 	LRM
+	LRM
+	Medium Pulse Laser
+	Medium Pulse Laser
+	Large Pulse Laser
+	Large Pulse Laser
 	
 Summoner 70-tons
 	Autocannon
@@ -18,6 +30,10 @@ Kodiak 100-tons
 	
 Stone Rhino 100-tons
 	Gauss Rifle
+	Gauss Rifle
+	Large Pulse Laser
+	Large Pulse Laser
+	Small Pulse Laser
 	
 Mauler 90-tons
 	Large Laser
