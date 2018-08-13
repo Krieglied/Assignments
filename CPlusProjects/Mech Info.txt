@@ -3,13 +3,13 @@ Hellbringer 65-tons
 	ER PPCs
 	ER Medium Laser
 	ER Medium Laser
-	ER Medium Laser
-	SRM
+	ER Medium Laser Med Power, Med Cost
+	SRM Low Power, Med Cost, 10, each attack (10 * .6 chance)
 	Machine Gun
 	Machine Gun
 	
 Mad Dog 60-tons
-	LRM
+	LRM Low Power, Low Cost, 10 shoots, each attack (10 * .3 chance)
 	LRM
 	Medium Pulse Laser
 	Medium Pulse Laser
@@ -17,17 +17,17 @@ Mad Dog 60-tons
 	Large Pulse Laser
 	
 Summoner 70-tons
-	Autocannon
-	LRM
+	Autocannon Low Power, Low Cost
+	LRM Low Power, Low Cost, 10 shoots, each attack (10 * .3 chance)
 	ER PPC
 
 Timber Wolf 75-tons
 	ER Large Laser
 	ER Large Laser
 	ER Medium Laser
-	ER Medium Laser
-	Medium Pulse Laser
-	LRM
+	ER Medium Laser Med Power, Med Cost
+	Medium Pulse Laser Med Power, Med Cost
+	LRM Low Power, Low Cost, 10 shoots, each attack (10 * .3 chance)
 	LRM
 	Machine Gun
 	Machine Gun
@@ -39,14 +39,14 @@ Warhammer 80-tons
 	Medium Pulse Laser
 	Medium Pulse Laser
 	Medium Pulse Laser
-	Medium Pulse Laser
-	SRM
+	Medium Pulse Laser Med Power, Med Cost
+	SRM Low Power, Med Cost, 10, each attack (10 * .6 chance)
 	
 Kodiak 100-tons
-	AC20
-	ER Large Laser
+	AC20 Very High Power, Very High Cost
+	ER Large Laser High Power, High Cost
 	SRM
-	SRM
+	SRM Low Power, Med Cost, 10, each attack (10 * .6 chance)
 	ER Medium Laser
 	ER Medium Laser
 	ER Medium Laser
@@ -54,21 +54,21 @@ Kodiak 100-tons
 	ER Medium Laser
 	ER Medium Laser
 	ER Medium Laser
-	ER Medium Laser
+	ER Medium Laser Med Power, Med Cost
 	
 Stone Rhino 100-tons
+	Gauss Rifle High Power, Low Cost, 3 shots
 	Gauss Rifle
-	Gauss Rifle
+	Large Pulse Laser High Power, High Cost
 	Large Pulse Laser
-	Large Pulse Laser
-	Small Pulse Laser
+	Small Pulse Laser Low Power, Low Cost
 	
 Mauler 90-tons
+	ER Large Laser High Power, High Cost
 	ER Large Laser
-	ER Large Laser
-	LRM
-	LRM
-	Autocannon
+	LRM Low Power, Low Cost, 10 shoots, each attack (10 * .3 chance)
+	LRM Low Power, Low Cost
+	Autocannon Low Power, Low Cost
 	Autocannon
 	Autocannon
 	Autocannon
