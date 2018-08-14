@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <time.h> 
 #include "weapon.h"
 // TODO: You will need to inherit your mecha from the class Mecha first... be sure to override the functions if you need to.
 
@@ -9,9 +11,10 @@ class Mecha {
 protected:
 	std::string mechaName;
 	std::string type;
-	float deathBlossomChance;
-	float everyoneChance;
-	float linkedChance;
+	int deathBlossomChance;
+	int everyoneChance;
+	int linkedChance;
+	int normalChance;
 	bool overloaded;
 
 	int hitPoints;// indicates total health remaining
@@ -46,6 +49,34 @@ public:
 			std::cout << "Your mech has overheated.  You're out of action for a turn." << std::endl;
 			heatSink = 15;
 			overloaded = true;
+		}
+	}
+	virtual void fireAllWeapons(float damageBonus, float heatBonus)
+	{}
+	virtual void releasePayload(Weapon& selected)
+	{
+		int result = 0;
+		srand(time(NULL));
+		if ((rand() % 10 + 1) <= normalChance)
+		{
+			selected.fireWeapon();
+			soakHeat(selected.getHeat());
+		}
+		else if ((rand() % 10 + 1) <= (normalChance + linkedChance))
+		{
+			//linked weapon fire
+		}
+		else if ((rand() % 10 + 1) <= (normalChance + linkedChance + everyoneChance))
+		{
+			std::cout << "Bring Everyone.  Everyone? .... EVERYONE!!!!" << std::endl;
+			fireAllWeapons(1, 0.75);
+		}
+		else
+		{
+			std::cout << "Initiating..... " << std::endl;
+			//sleepfor
+			std::cout << "Death Blossom" << std::endl;
+			fireAllWeapons(1.5, 2);
 		}
 	}
 };
