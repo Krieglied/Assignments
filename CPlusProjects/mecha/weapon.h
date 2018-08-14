@@ -20,6 +20,10 @@ protected:
 	int heatCost;					// Cost to use weapon on turn
 public:
 	Weapon() {}
+	int getHeat()
+	{
+		return heatCost;
+	}
 	virtual int fireWeapon()
 	{
 		std::cout << "Firing " << weaponName << " dealing " << damage << " damage." << std::endl;
