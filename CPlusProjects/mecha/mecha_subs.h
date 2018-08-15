@@ -2,23 +2,15 @@
 
 #include "mecha.h"
 #include "weapon.h"
-// WARNING
-/*
-There is an example subclass included... delete it if you want to try it without reference
-Please note, this is a bare bones subclass. It only includes enough to get you started
-*/
+#include <vector>
 
-// Sub Classes
-class Hellbringer : public Mecha 
+//These are the various types of mechs that are available to the players
+//There are eight in total, the main differences being the loadout of each mech
+//The hit points, and the heat sink pool
+//For now, the hit points and heat sink are balanced around 150 points
+//Might change the numbers later if those are unfair or unfun
+class Hellbringer : public Mecha
 {
-private:
-	PPC A;
-	PPC B;
-	ERMedLaser C;
-	ERMedLaser D;
-	ERMedLaser E;
-	SRM F;
-
 public:
 	// Default Constructor
 	Hellbringer() {
@@ -26,38 +18,32 @@ public:
 		type = "Hellbringer";
 		heatSink = 85;
 		hitPoints = 65;
+		deathBlossomChance = 10;
+		everyoneChance = 10;
+		linkedChance = 15;
+		normalChance = 65;
+		setWeapons();
 	}
 	// Constructor
 	Hellbringer(std::string mn) {
+		Hellbringer();
 		mechaName = mn;
-		type = "Hellbringer";
-		heatSink = 85;
-		hitPoints = 65;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats(); 
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		PPC A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		ERMedLaser B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		SRM C;
+		weaponSet.push_back(C);
 	}
 };
 
 class MadDog : public Mecha {
-private:
-	LRM A;
-	LRM B;
-	MedPLaser C;
-	MedPLaser D;
-	LargePLaser E;
-	LargePLaser F;
-
 public:
 	// Default Constructor
 	MadDog() {
@@ -65,35 +51,32 @@ public:
 		type = "Mad Dog";
 		heatSink = 90;
 		hitPoints = 60;
+		deathBlossomChance = 13;
+		everyoneChance = 20;
+		linkedChance = 20;
+		normalChance = 57;
+		setWeapons();
 	}
 	// Constructor
 	MadDog(std::string mn) {
+		MadDog();
 		mechaName = mn;
-		type = "Mad Dog";
-		heatSink = 90;
-		hitPoints = 60;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		LRM A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		MedPLaser B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		LargePLaser C;
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
 	}
 };
 
 class Summoner : public Mecha {
-private:
-	AC A;
-	LRM B;
-	PPC C;
-
 public:
 	// Default Constructor
 	Summoner() {
@@ -101,36 +84,29 @@ public:
 		type = "Summoner";
 		heatSink = 80;
 		hitPoints = 70;
+		deathBlossomChance = 35;
+		everyoneChance = 35;
+		linkedChance = 0;
+		normalChance = 30;
+		setWeapons();
 	}
 	// Constructor
 	Summoner(std::string mn) {
+		Summoner();
 		mechaName = mn;
-		type = "Summoner";
-		heatSink = 80;
-		hitPoints = 70;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		AC A;		
+		weaponSet.push_back(A);
+		LRM B;
+		weaponSet.push_back(B);
+		PPC C;
+		weaponSet.push_back(C);
 	}
 };
 
 class TimberWolf : public Mecha {
-private:
-	ERLargeLaser A;
-	ERLargeLaser B;
-	ERMedLaser C;
-	ERMedLaser D;
-	ERMedLaser E;
-	LRM F;
-	LRM G;
-
 public:
 	// Default Constructor
 	TimberWolf() {
@@ -138,41 +114,33 @@ public:
 		type = "Timber Wolf";
 		heatSink = 75;
 		hitPoints = 75;
+		deathBlossomChance = 10;
+		everyoneChance = 15;
+		linkedChance = 30;
+		normalChance = 45;
+		setWeapons();
 	}
 	// Constructor
 	TimberWolf(std::string mn) {
+		TimberWolf();
 		mechaName = mn;
-		type = "Timber Wolf";
-		heatSink = 75;
-		hitPoints = 75;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats();
-		G.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		ERLargeLaser A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		ERMedLaser B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		LRM C;
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
 	}
 };
 
 class Warhammer : public Mecha {
-private:
-	PPC A;
-	PPC B;
-	MedPLaser C;
-	MedPLaser D;
-	MedPLaser E;
-	MedPLaser F;
-	MedPLaser G;
-	SRM H;
-
 public:
 	// Default Constructor
 	Warhammer() {
@@ -180,46 +148,34 @@ public:
 		type = "Warhammer";
 		heatSink = 70;
 		hitPoints = 80;
+		deathBlossomChance = 12;
+		everyoneChance = 15;
+		linkedChance = 18;
+		normalChance = 65;
+		setWeapons();
 	}
 	// Constructor
 	Warhammer(std::string mn) {
+		Warhammer();
 		mechaName = mn;
-		type = "Warhammer";
-		heatSink = 70;
-		hitPoints = 80;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats();
-		G.display_weapon_stats();
-		H.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		PPC A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		MedPLaser B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		SRM C;
+		weaponSet.push_back(C);
 	}
 };
 
 class Kodiak : public Mecha {
-private:
-	AC A;
-	ERLargeLaser B;
-	SRM C;
-	SRM D;
-	ERMedLaser E;
-	ERMedLaser F;
-	ERMedLaser G;
-	ERMedLaser H;
-	ERMedLaser I;
-	ERMedLaser J;
-	ERMedLaser K;
-	ERMedLaser L;
-
 public:
 	// Default Constructor
 	Kodiak() {
@@ -227,43 +183,39 @@ public:
 		type = "Kodiak";
 		heatSink = 50;
 		hitPoints = 100;
+		deathBlossomChance = 5;
+		everyoneChance = 5;
+		linkedChance = 5;
+		normalChance = 85;
+		setWeapons();
 	}
 	// Constructor
 	Kodiak(std::string mn) {
+		Kodiak();
 		mechaName = mn;
-		type = "Kodiak";
-		heatSink = 50;
-		hitPoints = 100;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats();
-		G.display_weapon_stats();
-		H.display_weapon_stats();
-		I.display_weapon_stats();
-		J.display_weapon_stats();
-		K.display_weapon_stats();
-		L.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		AC A;
+		weaponSet.push_back(A);
+		ERLargeLaser B;
+		weaponSet.push_back(B);
+		SRM C;
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
+		ERMedLaser D;
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
+		weaponSet.push_back(D);
 	}
 };
 
 class StoneRhino : public Mecha {
-private:
-	Gauss A;
-	Gauss B;
-	LargePLaser C;
-	LargePLaser D;
-	SmallPLaser E;
-
 public:
 	// Default Constructor
 	StoneRhino() {
@@ -271,39 +223,31 @@ public:
 		type = "Stone Rhino";
 		heatSink = 50;
 		hitPoints = 100;
+		deathBlossomChance = 6;
+		everyoneChance = 7;
+		linkedChance = 7;
+		normalChance = 80;
+		setWeapons();
 	}
 	// Constructor
 	StoneRhino(std::string mn) {
+		StoneRhino();
 		mechaName = mn;
-		type = "Stone Rhino";
-		heatSink = 50;
-		hitPoints = 100;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		Gauss A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		LargePLaser B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		SmallPLaser C;
+		weaponSet.push_back(C);
 	}
 };
 
 class Mauler : public Mecha {
-private:
-	ERLargeLaser A;
-	ERLargeLaser B;
-	LRM C;
-	LRM D;
-	AC E;
-	AC F;
-	AC G;
-	AC H;
-
 public:
 	// Default Constructor
 	Mauler() {
@@ -311,27 +255,29 @@ public:
 		type = "Mauler";
 		heatSink = 60;
 		hitPoints = 90;
+		deathBlossomChance = 4;
+		everyoneChance = 4;
+		linkedChance = 15;
+		normalChance = 77;
+		setWeapons();
 	}
 	// Constructor
 	Mauler(std::string mn) {
+		Mauler();
 		mechaName = mn;
-		type = "Mauler";
-		heatSink = 60;
-		hitPoints = 90;
 	}
-	void display_stats() {
-		std::cout << "Displaying Stats" << std::endl;
-		display_main_stats();
-		std::cout << "===== WEAPONS =====" << std::endl;
-		A.display_weapon_stats();
-		B.display_weapon_stats();
-		C.display_weapon_stats();
-		D.display_weapon_stats();
-		E.display_weapon_stats();
-		F.display_weapon_stats();
-		G.display_weapon_stats();
-		H.display_weapon_stats();
-		std::cout << "\n\n";
-
+	void setWeapons() override
+	{
+		ERLargeLaser A;
+		weaponSet.push_back(A);
+		weaponSet.push_back(A);
+		LRM B;
+		weaponSet.push_back(B);
+		weaponSet.push_back(B);
+		AC C;
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
+		weaponSet.push_back(C);
 	}
 };
