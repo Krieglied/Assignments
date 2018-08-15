@@ -4,31 +4,39 @@
 #include <cstdlib>
 #include <time.h> 
 
-/*
-This one is already built for you... feel free to add to it.
-Utilize the damage in either a method (pref in mecha_sub) or main() to determine how muchh damage you do on an enemy mech
-Ensure power is being subtracted by cost after every action. Prevent action if power is too low for action (this can be done via method (pref in mecha sub)  or main)
-*/
-
-
-
-
+//Base Class for the weapons
 class Weapon {
 protected:
 	std::string weaponName;
-	int damage;					// How much damage this weapon does
-	int heatCost;					// Cost to use weapon on turn
+	//Not all weapons will have a default value for damage, i.e. the missile type weapon use random chance
+	int damage;
+	//Based on BattleTech, each use of a weapon will generate heat and once the Heat Sink for a mech is at 0
+	//The mech will shutdown for a turn
+	int heatCost;
+	//Some weapons have a limited use
+	int ammo;
 public:
 	Weapon() {}
+	//Default getters
 	int getHeat()
 	{
 		return heatCost;
 	}
+	std::string getName()
+	{
+		return weaponName;
+	}
+	//Let's the players know how damage is being done
 	virtual int fireWeapon()
 	{
 		std::cout << "Firing " << weaponName << " dealing " << damage << " damage." << std::endl;
 		return damage;
 	}
+	virtual void useAmmo()
+	{
+		ammo--;
+	}
+	//Default display method, several weapons override this to account for ammo
 	virtual void display_weapon_stats() {
 		std::cout << "Model: " << weaponName << std::endl;
 		std::cout << "Damage: " << damage << std::endl;
@@ -36,7 +44,7 @@ public:
 	}
 };
 
-
+//This first set of weapons are just standard, with varying amounts of damage done and heat generated
 class PPC : public Weapon {
 public:
 	PPC()
@@ -94,16 +102,14 @@ public:
 		heatCost = 2;
 	}
 };
-
+//The next three weapons have an added element of limited ammunition, which depletes after every use.
 class Gauss : public Weapon {
-private:
-	int ammo;
 public:
 	Gauss()
 	{
 		weaponName = "Gauss Rifle";
 		damage = 15;
-		heatCost = 1; 
+		heatCost = 1;
 		ammo = 5;
 	}
 	int fireWeapon() override
@@ -115,7 +121,7 @@ public:
 		}
 		else
 		{
-			ammo--;
+			std::cout << "Firing " << weaponName << " dealing " << damage << " damage." << std::endl;
 			return damage;
 		}
 	}
@@ -128,8 +134,6 @@ public:
 };
 
 class AC : public Weapon {
-private:
-	int ammo;
 public:
 	AC()
 	{
@@ -147,7 +151,7 @@ public:
 		}
 		else
 		{
-			ammo--;
+			std::cout << "Firing " << weaponName << " dealing " << damage << " damage." << std::endl;
 			return damage;
 		}
 	}
@@ -160,8 +164,6 @@ public:
 };
 
 class AC20 : public Weapon {
-private:
-	int ammo;
 public:
 	AC20()
 	{
@@ -179,7 +181,7 @@ public:
 		}
 		else
 		{
-			ammo--;
+			std::cout << "Firing " << weaponName << " dealing " << damage << " damage." << std::endl;
 			return damage;
 		}
 	}
@@ -190,15 +192,15 @@ public:
 		std::cout << "Ammunition: " << ammo << std::endl;
 	}
 };
-
+//The missiles, in addition to the ammunition, will have a random chance for damage
+//Maximum damage is 10, minimum damage is 2
 class LRM : public Weapon {
-private:
-	int ammo;
 public:
 	LRM()
 	{
 		weaponName = "Long Range Missiles";
 		heatCost = 6;
+		damage = 10;
 		ammo = 10;
 	}
 	int fireWeapon() override
@@ -214,19 +216,20 @@ public:
 			srand(time(NULL));
 			for (int i = 0; i < 10; i++)
 			{
-				if ((rand() % 10 + 1) < 4)
+				int hitChance = (rand() % 10 + 1);
+				if (hitChance < 7)
 				{
 					result++;
 				}
 			}
 			if (result < 2)
 			{
-				ammo--;
+				std::cout << "Firing " << weaponName << " dealing " << 2 << " damage." << std::endl;
 				return 2;
 			}
 			else
 			{
-				ammo--;
+				std::cout << "Firing " << weaponName << " dealing " << result << " damage." << std::endl;
 				return result;
 			}
 		}
@@ -240,12 +243,11 @@ public:
 };
 
 class SRM : public Weapon {
-private:
-	int ammo;
 public:
 	SRM()
 	{
-		weaponName = "Long Range Missiles";
+		weaponName = "Short Range Missiles";
+		damage = 10;
 		heatCost = 4;
 		ammo = 10;
 	}
@@ -262,19 +264,20 @@ public:
 			srand(time(NULL));
 			for (int i = 0; i < 10; i++)
 			{
-				if ((rand() % 10 + 1) < 4)
+				int hitChance = (rand() % 10 + 1);
+				if (hitChance < 7)
 				{
 					result++;
 				}
 			}
 			if (result < 2)
 			{
-				ammo--;
+				std::cout << "Firing " << weaponName << " dealing " << 2 << " damage." << std::endl;
 				return 2;
 			}
 			else
 			{
-				ammo--;
+				std::cout << "Firing " << weaponName << " dealing " << result << " damage." << std::endl;
 				return result;
 			}
 		}
