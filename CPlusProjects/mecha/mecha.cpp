@@ -273,7 +273,6 @@ int main() {
 	std::cout << "    #(((#%*// #/((# *//%###(.             /((((#/( (*/*/ */(###%#%   " << std::endl;
 	std::cout << "   %. %(##(,/ #*((( .(,#%## (/          ,#.(/((/*( #/%*( #./(/*( **  " << std::endl;
 	std::cout << "  ...( //*((/(*////(/#(/,..*,,/        (**(. /(#(#(#,,**/(##(/,.(//( " << std::endl;
-	system("chrome.exe https://www.youtube.com/watch?v=2Fil6W5KGVA&index=4&list=PL3E409CD81FFF6F55");
 	getchar();
 	getchar();
 
