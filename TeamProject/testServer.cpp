@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -17,6 +20,9 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "4444"
 
+void printMenu();
+int userInput(int value);
+
 int __cdecl main(int argc, char **argv)
 {
 	WSADATA wsaData;
@@ -24,20 +30,12 @@ int __cdecl main(int argc, char **argv)
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
 		hints;
-	char sendbuf[] = "this is a test";
-	char recvbuf[DEFAULT_BUFLEN];
-	int iResult;
-	int recvbuflen = DEFAULT_BUFLEN;
-
-	// Validate the parameters
-	if (argc != 2) {
-		std::cout << "usage: " << argv[0] << " server-name" << std::endl;
-		return 1;
-	}
+	std::vector<char> buffer(5000);
+	int iResult, cmdChoice;
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (iResult != 0) 
+	if (iResult != 0)
 	{
 		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
 		return 1;
@@ -49,8 +47,8 @@ int __cdecl main(int argc, char **argv)
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
-	if (iResult != 0) 
+	iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
+	if (iResult != 0)
 	{
 		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
 		WSACleanup();
@@ -58,12 +56,12 @@ int __cdecl main(int argc, char **argv)
 	}
 
 	// Attempt to connect to an address until one succeeds
-	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) 
+	for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
 	{
 
 		// Create a SOCKET for connecting to server
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-		if (ConnectSocket == INVALID_SOCKET) 
+		if (ConnectSocket == INVALID_SOCKET)
 		{
 			std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
 			WSACleanup();
@@ -72,7 +70,7 @@ int __cdecl main(int argc, char **argv)
 
 		// Connect to server.
 		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
-		if (iResult == SOCKET_ERROR) 
+		if (iResult == SOCKET_ERROR)
 		{
 			closesocket(ConnectSocket);
 			ConnectSocket = INVALID_SOCKET;
@@ -83,28 +81,49 @@ int __cdecl main(int argc, char **argv)
 
 	freeaddrinfo(result);
 
-	if (ConnectSocket == INVALID_SOCKET) 
+	if (ConnectSocket == INVALID_SOCKET)
 	{
-		std::cout << "Unable to connect to server!"<< std::endl;
+		std::cout << "Unable to connect to server!" << std::endl;
 		WSACleanup();
 		return 1;
 	}
-
-	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-	if (iResult == SOCKET_ERROR) 
+	std::cout << "Ready to start sending commands" << std::endl;
+	std::string commands;
+	do
 	{
-		std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
-		closesocket(ConnectSocket);
-		WSACleanup();
-		return 1;
-	}
-
+		do
+		{
+			//Handles user input, if not a number, send back as invalid
+			cmdChoice = userInput(cmdChoice);
+			//If not is range of the mech number, send back as invalid
+			if (!(cmdChoice > 0 && cmdChoice < 9))
+			{
+				std::cout << "Invalid number, please try again" << std::endl;
+			}
+			//Continue loop until user makes a valid choice
+		} while (!(cmdChoice > 0 && cmdChoice < 9));
+		if (cmdChoice == 1)
+		{
+			std::string test = "dir";
+			// Send an initial buffer
+			iResult = send(ConnectSocket, test.data(), test.size(), 0);
+			if (iResult == SOCKET_ERROR)
+			{
+				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
+				closesocket(ConnectSocket);
+				WSACleanup();
+				return 1;
+			}
+			std::cout << "Bytes Sent: " << iResult << std::endl;
+		}
+		//Here is where test server code will go
+	} while (cmdChoice != 0);
+	
 	std::cout << "Bytes Sent: " << iResult << std::endl;
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);
-	if (iResult == SOCKET_ERROR) 
+	if (iResult == SOCKET_ERROR)
 	{
 		std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ConnectSocket);
@@ -113,6 +132,7 @@ int __cdecl main(int argc, char **argv)
 	}
 
 	// Receive until the peer closes the connection
+	/*
 	do {
 
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
@@ -129,11 +149,32 @@ int __cdecl main(int argc, char **argv)
 			std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
 		}
 
-	} while (iResult > 0);
+	} while (iResult > 0);*/
 
 	// cleanup
 	closesocket(ConnectSocket);
 	WSACleanup();
 
 	return 0;
+}
+void printMenu()
+{
+	std::cout << "Please select a command:" << std::endl;
+	std::cout << "Test Command (1)" << std::endl;
+	std::cout << "Exit (0)" << std::endl;
+}
+int userInput(int value)
+{
+	//Handles user input from the console
+	std::string input;
+	while (true) {
+		std::getline(std::cin, input);
+		std::stringstream myStream(input);
+		if (myStream >> value)
+		{
+			break;
+		}
+		std::cout << "Invalid number, please try again" << std::endl;
+	}
+	return value;
 }
