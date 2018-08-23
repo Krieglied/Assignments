@@ -17,7 +17,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_ADDRESS "localhost"
 #define DEFAULT_PORT "4444"
 
 void printMenu();
@@ -31,7 +31,8 @@ int __cdecl main(int argc, char **argv)
 		*ptr = NULL,
 		hints;
 	std::vector<char> buffer(5000);
-	int iResult, cmdChoice;
+	int iResult;
+	int	cmdChoice = 99;
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -47,7 +48,7 @@ int __cdecl main(int argc, char **argv)
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(DEFAULT_ADDRESS, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0)
 	{
 		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
@@ -91,17 +92,19 @@ int __cdecl main(int argc, char **argv)
 	std::string commands;
 	do
 	{
+		std::vector<char> inputBuffer(5000);
 		do
 		{
+			printMenu();
 			//Handles user input, if not a number, send back as invalid
 			cmdChoice = userInput(cmdChoice);
 			//If not is range of the mech number, send back as invalid
-			if (!(cmdChoice > 0 && cmdChoice < 9))
+			if (!(cmdChoice >= 0 && cmdChoice < 2))
 			{
 				std::cout << "Invalid number, please try again" << std::endl;
 			}
 			//Continue loop until user makes a valid choice
-		} while (!(cmdChoice > 0 && cmdChoice < 9));
+		} while (!(cmdChoice >= 0 && cmdChoice < 2));
 		if (cmdChoice == 1)
 		{
 			std::string test = "dir";
@@ -115,6 +118,17 @@ int __cdecl main(int argc, char **argv)
 				return 1;
 			}
 			std::cout << "Bytes Sent: " << iResult << std::endl;
+
+			iResult = recv(ConnectSocket, inputBuffer.data(), inputBuffer.size(), 0);
+			std::cout << "data has been received." << std::endl;
+			if (iResult != -1)
+			{
+				inputBuffer.resize(iResult);
+			}
+			if (iResult != 0)
+			{
+				std::cout << inputBuffer.data() << std::endl;
+			}
 		}
 		//Here is where test server code will go
 	} while (cmdChoice != 0);
@@ -130,26 +144,6 @@ int __cdecl main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
-
-	// Receive until the peer closes the connection
-	/*
-	do {
-
-		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0)
-		{
-			std::cout << "Bytes received: " << iResult << std::endl;
-		}
-		else if (iResult == 0)
-		{
-			std::cout << "Connection closed" << std::endl;
-		}
-		else
-		{
-			std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
-		}
-
-	} while (iResult > 0);*/
 
 	// cleanup
 	closesocket(ConnectSocket);
