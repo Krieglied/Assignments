@@ -152,12 +152,64 @@ int __cdecl main(int argc, char **argv)
 				std::cout << "Invalid number, please try again" << std::endl;
 			}
 			//Continue loop until user makes a valid choice
-		} while (!(cmdChoice >= 0 && cmdChoice < 2));
+		} while (!(cmdChoice >= 0 && cmdChoice < 4));
 		if (cmdChoice == 1)
 		{
-			std::string test = "dir";
+			std::string directory = "dir";
 			// Send an initial buffer
-			iResult = send(ConnectSocket, test.data(), test.size(), 0);
+			iResult = send(ConnectSocket, directory.data(), directory.size(), 0);
+			if (iResult == SOCKET_ERROR)
+			{
+				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
+				closesocket(ConnectSocket);
+				WSACleanup();
+				return 1;
+			}
+			std::cout << "Bytes Sent: " << iResult << std::endl;
+
+			iResult = recv(ConnectSocket, inputBuffer.data(), inputBuffer.size(), 0);
+			std::cout << "data has been received." << std::endl;
+			if (iResult != -1)
+			{
+				inputBuffer.resize(iResult);
+			}
+			if (iResult != 0)
+			{
+				std::cout << inputBuffer.data() << std::endl;
+			}
+		}
+		if (cmdChoice == 2)
+		{
+			std::string ipconfig = "ipconfig /all";
+			// Send an initial buffer
+			iResult = send(ConnectSocket, ipconfig.data(), ipconfig.size(), 0);
+			if (iResult == SOCKET_ERROR)
+			{
+				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
+				closesocket(ConnectSocket);
+				WSACleanup();
+				return 1;
+			}
+			std::cout << "Bytes Sent: " << iResult << std::endl;
+
+			iResult = recv(ConnectSocket, inputBuffer.data(), inputBuffer.size(), 0);
+			std::cout << "data has been received." << std::endl;
+			if (iResult != -1)
+			{
+				inputBuffer.resize(iResult);
+			}
+			if (iResult != 0)
+			{
+				std::cout << inputBuffer.data() << std::endl;
+			}
+		}
+		if (cmdChoice == 3)
+		{
+			std::string cmdInput;
+			std::cout << "Type command to be used (type/utilize exact command syntax to send)" << std::endl;
+			std::getline(std::cin, cmdInput);
+						// Send an initial buffer
+			iResult = send(ConnectSocket, cmdInput.data(), cmdInput.size(), 0);
 			if (iResult == SOCKET_ERROR)
 			{
 				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
@@ -202,8 +254,10 @@ int __cdecl main(int argc, char **argv)
 void printMenu()
 {
 	std::cout << "Please select a command:" << std::endl;
-	std::cout << "Test Command (1)" << std::endl;
-	std::cout << "Exit (0)" << std::endl;
+	std::cout << "(1) Quick Grab - Current Directory Content List" << std::endl;
+	std::cout << "(2) Quick Grab - IP Configuration" << std::endl;
+	std::cout << "(3) Input your own command" << std::endl;
+	std::cout << "(0) Exit" << std::endl;
 }
 int userInput(int value)
 {
