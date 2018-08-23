@@ -17,7 +17,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_ADDRESS "localhost"
 #define DEFAULT_PORT "4444"
 
 void printMenu();
@@ -48,7 +48,7 @@ int __cdecl main(int argc, char **argv)
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo("localhost", DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(DEFAULT_ADDRESS, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0)
 	{
 		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
