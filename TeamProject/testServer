@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <string>
+#include <sstream>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -18,6 +20,9 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "4444"
 
+void printMenu();
+int userInput(int value);
+
 int __cdecl main(int argc, char **argv)
 {
 	WSADATA wsaData;
@@ -26,15 +31,7 @@ int __cdecl main(int argc, char **argv)
 		*ptr = NULL,
 		hints;
 	std::vector<char> buffer(5000);
-	char recvbuf[DEFAULT_BUFLEN];
-	int iResult;
-	int recvbuflen = DEFAULT_BUFLEN;
-
-	// Validate the parameters
-	/*if (argc != 2) {
-		std::cout << "usage: " << argv[0] << " server-name" << std::endl;
-		return 1;
-	}*/
+	int iResult, cmdChoice;
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -90,6 +87,24 @@ int __cdecl main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
+	std::cout << "Ready to start sending commands" << std::endl;
+	std::string commands;
+	do
+	{
+		do
+		{
+			//Handles user input, if not a number, send back as invalid
+			cmdChoice = userInput(cmdChoice);
+			//If not is range of the mech number, send back as invalid
+			if (!(cmdChoice > 0 && cmdChoice < 9))
+			{
+				std::cout << "Invalid number, please try again" << std::endl;
+			}
+			//Continue loop until user makes a valid choice
+		} while (!(cmdChoice > 0 && cmdChoice < 9));
+
+		//Here is where test server code will go
+	} while (cmdChoice != 0);
 	std::string test = "dir";
 	// Send an initial buffer
 	iResult = send(ConnectSocket, test.data(), test.size(), 0);
@@ -138,4 +153,25 @@ int __cdecl main(int argc, char **argv)
 	WSACleanup();
 
 	return 0;
+}
+void printMenu()
+{
+	std::cout << "Please select a command:" << std::endl;
+	std::cout << "Test Command (1)" << std::endl;
+	std::cout << "Exit (0)" << std::endl;
+}
+int userInput(int value)
+{
+	//Handles user input from the console
+	std::string input;
+	while (true) {
+		std::getline(std::cin, input);
+		std::stringstream myStream(input);
+		if (myStream >> value)
+		{
+			break;
+		}
+		std::cout << "Invalid number, please try again" << std::endl;
+	}
+	return value;
 }
