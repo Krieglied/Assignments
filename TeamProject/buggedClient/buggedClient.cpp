@@ -217,7 +217,7 @@ void setDriveLetter(std::string directory)
 	std::cout << "Current drive is %s." << directory << std::endl; //Displays current drive 
 	std::cout << "Would you like to change drives? ";	//Prompts user for change if desired
 	std::getline(std::cin, tempDrive);//Takes in user's choice 
-	//If users choice is any of the below options, user chooses new letter
+									  //If users choice is any of the below options, user chooses new letter
 	if (tempDrive == "y" || tempDrive == "Y" || tempDrive == "yes" || tempDrive == "Yes" || tempDrive == "YES")
 	{
 		std::cout << "Enter the new drive letter: ";	//Accepts new drive letter

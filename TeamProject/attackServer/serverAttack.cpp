@@ -61,7 +61,7 @@ int __cdecl main(int argc, char **argv)
 		while (1)
 		{
 			std::cout << "Enter IPv4 address of the client you wish to connect to:  (i.e. 10.111.2.113)" << std::endl;
-			std::cin >> inputIP;
+			std::getline(std::cin, inputIP);
 			int n = inputIP.length();
 			if (n < 16)
 			{
@@ -95,8 +95,7 @@ int __cdecl main(int argc, char **argv)
 	std::cout << "loop ended" << std::endl;
 
 	// Resolve the server address and port
-//	iResult = getaddrinfo(DEFAULT_ADDRESS, DEFAULT_PORT, &hints, &result);
-	iResult = getaddrinfo(inputIParray, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(inputIP.c_str(), DEFAULT_PORT, &hints, &result);
 	if (iResult != 0)
 	{
 		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
@@ -147,7 +146,7 @@ int __cdecl main(int argc, char **argv)
 			//Handles user input, if not a number, send back as invalid
 			cmdChoice = userInput(cmdChoice);
 			//If not is range of the mech number, send back as invalid
-			if (!(cmdChoice >= 0 && cmdChoice < 2))
+			if (!(cmdChoice >= 0 && cmdChoice < 4))
 			{
 				std::cout << "Invalid number, please try again" << std::endl;
 			}
