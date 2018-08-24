@@ -1,4 +1,5 @@
 #define WIN32_LEAN_AND_MEAN
+#define _CRT_SECURE_NO_WARNINGS 1
 
 #include <windows.h>
 #include <winsock2.h>
@@ -30,7 +31,7 @@ int __cdecl main(int argc, char **argv)
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
 		hints;
-	std::vector<char> buffer(5000);
+	std::vector<char> buffer(100000);
 	int iResult;
 	int	cmdChoice = 99;
 
@@ -88,8 +89,11 @@ int __cdecl main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
+
 	std::cout << "Ready to start sending commands" << std::endl;
 	std::string commands;
+	std::stringstream input;
+	char newbuffer[4096 * 2];
 	do
 	{
 		std::vector<char> inputBuffer(5000);
@@ -107,7 +111,7 @@ int __cdecl main(int argc, char **argv)
 		} while (!(cmdChoice >= 0 && cmdChoice < 2));
 		if (cmdChoice == 1)
 		{
-			std::string test = "dir";
+			std::string test = "d";
 			// Send an initial buffer
 			iResult = send(ConnectSocket, test.data(), test.size(), 0);
 			if (iResult == SOCKET_ERROR)
@@ -118,17 +122,16 @@ int __cdecl main(int argc, char **argv)
 				return 1;
 			}
 			std::cout << "Bytes Sent: " << iResult << std::endl;
-
-			iResult = recv(ConnectSocket, inputBuffer.data(), inputBuffer.size(), 0);
+			do
+			{
+				iResult = recv(ConnectSocket, newbuffer, sizeof(newbuffer) -1, 0);
+				for (int i = 0; i < iResult; i++)
+				{
+					input << newbuffer[i];
+				}
+				std::cout << input.str() << std::endl;
+			} while (newbuffer != '\0');
 			std::cout << "data has been received." << std::endl;
-			if (iResult != -1)
-			{
-				inputBuffer.resize(iResult);
-			}
-			if (iResult != 0)
-			{
-				std::cout << inputBuffer.data() << std::endl;
-			}
 		}
 		//Here is where test server code will go
 	} while (cmdChoice != 0);
