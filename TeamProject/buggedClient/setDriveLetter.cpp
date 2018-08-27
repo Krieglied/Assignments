@@ -62,10 +62,11 @@ bool choseAvailableDrive(std::string input)
 	{			
 		while (std::getline(diskSelection, line))
 		{
-			if (line.front() == 'N')	//The first line of wmic command is "Name", this will bypass it
+			if (line == "Name")	//The first line of wmic command is "Name", this will bypass it
 			{
-				if (input.front() == line.front()) //This will pick up the 'N' drive
+				if (input[0] == line[0]) //This will pick up the 'N' drive
 				{
+					driveSet = 1;
 					return true;
 				}
 				else
@@ -73,10 +74,10 @@ bool choseAvailableDrive(std::string input)
 					continue;
 				}
 			}
-			else if (input.front() == line.front())	//The drive selected matches the output of wmic command
+			else if (input[0] == line[0])	//The drive selected matches the output of wmic command
 			{
-				return true;
 				driveSet = 1;
+				return true;				
 			}
 		}		
 		if (driveSet == 0)
