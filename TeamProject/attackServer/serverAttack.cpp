@@ -5,6 +5,7 @@
 #include <ws2tcpip.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -49,7 +50,7 @@ int __cdecl main(int argc, char **argv)
 
 	//Get IP address
 	std::string inputIP;
-	int n = inputIP.length();
+	//int n = inputIP.length();
 	char inputIParray[16] = { 0 };
 	int z = 1;
 	while (z == 1)
@@ -59,21 +60,21 @@ int __cdecl main(int argc, char **argv)
 			std::cout << "Enter IPv4 address of the client you wish to connect to:  (i.e. 10.111.2.113)" << std::endl;
 			std::getline(std::cin, inputIP);
 			int n = inputIP.length();
-			if (n < 16)
+			if (n < 16)  //ensure input is not longer than 15 elements
 			{
 				std::cout << "IPv4 address input is:  ";
 
 				//copy string into char array for validation function input
-				strcpy(inputIParray, inputIP.c_str());
+				strcpy(inputIParray, inputIP.c_str());  
 				for (int i = 0; i < n; i++)
 				{
-					std::cout << inputIParray[i];
+					std::cout << inputIParray[i];  //prints out IP address from the char array
 				}
 				std::cout << std::endl;
-				if (is_valid_ip(inputIParray))
+				if (is_valid_ip(inputIParray))  //checks it input IP is valid
 				{
 					std::cout << "IPv4 Address:  " << inputIP << "  Accepted" << std::endl;
-					z = 0;
+					z = 0;  
 					break;
 				}
 				else
@@ -87,8 +88,9 @@ int __cdecl main(int argc, char **argv)
 			}
 		}
 	}
-	//test print
-	std::cout << "loop ended" << std::endl;
+	// test print to ensure loop finishes
+	std::cout << "Loop ended" << std::endl;
+
 
 	// Resolve the server address and port
 	iResult = getaddrinfo(inputIP.c_str(), DEFAULT_PORT, &hints, &result);
@@ -139,6 +141,7 @@ int __cdecl main(int argc, char **argv)
 	char newbuffer[4096 * 2];
 	do
 	{
+		std::vector<char> inputBuffer(5000);
 		//Handles the user input for which command to run
 		do
 		{
