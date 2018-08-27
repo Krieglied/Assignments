@@ -2,14 +2,14 @@
 
 std::string setDriveLetter()
 {
-	system("wmic logicaldisk get name > logicalDisks.txt");
+	exec("wmic logicaldisk get name > logicalDisks.txt");
 	std::string tempDrive;	//temp choice for drive
 	std::string tempLetter;
 	std::string directory = "C:\\*";
 	std::string logicalDisks;	 
 	std::cout << "Available drives" << std::endl;
 	std::cout << "----------------" << std::endl;
-	system("wmic logicaldisk get name");	
+	exec("wmic logicaldisk get name");
 	std::cout << "Current drive is " << directory << std::endl; //Displays current drive
 	std::cout << "Would you like to change drives(Y/N)? ";	//Prompts user for change if desired
 	std::getline(std::cin, tempDrive);//Takes in user's choice 
@@ -54,33 +54,41 @@ std::string setDriveLetter()
 
 bool choseAvailableDrive(std::string input)
 {
-	std::ifstream diskSelection;
+	std::ifstream diskSelection("logicalDisks.txt");
 	std::string line;
 
-	diskSelection.open("logicalDisks.txt");
+	int driveSet = 0;	//Necessary in order to return false if the drive is not Set
 	if (diskSelection.is_open())
-	{
+	{			
 		while (std::getline(diskSelection, line))
 		{
-			if (line == "Name")
+			if (line.front() == 'N')	//The first line of wmic command is "Name", this will bypass it
 			{
-				continue;
+				if (input.front() == line.front()) //This will pick up the 'N' drive
+				{
+					return true;
+				}
+				else
+				{
+					continue;
+				}
 			}
-			else if (input[0] == line[0])
+			else if (input.front() == line.front())	//The drive selected matches the output of wmic command
 			{
 				return true;
+				driveSet = 1;
 			}
-			else
-			{
-				std::cout << "Unknown drive selected." << std::endl;
-				return false;
-			}
+		}		
+		if (driveSet == 0)
+		{
+			return false;
 		}
-		diskSelection.close();
+		diskSelection.close();		
 	}
 	else 
 		std::cout << "Unable to open file";
 }
+
 bool isLetters(std::string input)
 {
 	for (int i = 0; i < 1; i++)
@@ -93,4 +101,21 @@ bool isLetters(std::string input)
 	}
 	//At this point, we have gone through every character and checked it.
 	return true; //Return true since every character had to be A-Z
+}
+
+std::string exec(const char* cmd)
+{
+	std::array<char, 256> buffer;
+	std::string result;
+	//Opens a pipe for the purposes of running the cmd
+	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	//While there is data to grab, process that output into the string
+	while (!feof(pipe.get()))
+	{
+		if (fgets(buffer.data(), 256, pipe.get()) != nullptr)
+			result += buffer.data();
+	}
+	return result;
 }

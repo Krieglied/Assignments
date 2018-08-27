@@ -12,6 +12,11 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <cstdio>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
 #include <fstream>
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -35,5 +40,11 @@ void printSystem(std::vector<char>& outputBuffer);
 
 //This function is to verify that the input is letters
 bool isLetters(std::string input);
+
+//This function is used to print out the tasks
+void printTasks(std::vector<char>& outputBuffer);
+
+//Function to execute system 
+std::string exec(const char* cmd);
 
 
