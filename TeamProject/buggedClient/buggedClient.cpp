@@ -15,7 +15,6 @@ int __cdecl main(void)
 	struct addrinfo *result = NULL;
 	struct addrinfo hints;
 
-	int iSendResult;
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -81,7 +80,7 @@ int __cdecl main(void)
 		WSACleanup();
 		return 1;
 	}
-
+	std::stringstream output;
 	// No longer need listening socket
 	closesocket(ListenSocket);
 	// Receive until the peer shuts down the connection
@@ -102,15 +101,28 @@ int __cdecl main(void)
 			//Central function that handles switch/cases for all the commands
 			processCommand(inputBuffer, outputBuffer);
 			std::cout << std::endl;
+			char newbuffer[4096 * 2];
 			//If the command asks for a result (at this stage, all will), the result needs to be sent back 
 			//to the server
-			iResult = send(ServerSocket, outputBuffer.data(), outputBuffer.size(), 0);
+			for (int i = 0; i < outputBuffer.size(); i++)
+			{
+				newbuffer[i % sizeof(newbuffer)] = outputBuffer[i];
+				if ((i % sizeof(newbuffer)) == 0 && i != 0)
+				{
+					std::cout << newbuffer << std::endl;
+					iResult = send(ServerSocket, newbuffer, sizeof(newbuffer), 0);
+				}
+			}
+			iResult = send(ServerSocket, newbuffer, sizeof(newbuffer), 0);
+			char end = 0;
+			iResult = send(ServerSocket, &end, sizeof(end), 0);
 		}
 		//If 0 bytes has been sent, then the server has shutdown and so should the client
 		else
 		{
 			break;
 		}
+		outputBuffer.clear();
 	} while (true);
 
 	// shutdown the connection since we're done
