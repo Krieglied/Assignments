@@ -1,26 +1,7 @@
 //Team Project Smith, Kreiser, Graham
 //August 22, 2018
 
-#undef UNICODE
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-#include <sstream>
-#include <vector>
-
-#pragma comment (lib, "Ws2_32.lib")
-
-#define DEFAULT_PORT "4444"
-
-void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
-void setDriveLetter(std::string directory);
-void listFiles(std::vector<char>& outputBuffer, std::string directory);
-void printSystem(std::vector<char>& outputBuffer);
+#include "client.h"
 
 int __cdecl main(void)
 {
@@ -147,95 +128,6 @@ int __cdecl main(void)
 	WSACleanup();
 	return 0;
 }
-//Central function that handles switch/cases for all the commands
-void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
-{
-	std::string directory = "C:\\*";
-	std::string command = buffer.data();
-	setDriveLetter(directory);
-	switch (buffer[0])
-	{
-	case 'd':
-		//Calls the function to list files based on a directory provided
-		//C:\ is used as a default
-		//The outputBuffer has all the files and directory information listed
-		listFiles(outputBuffer, directory);
-		break;
-	}
-}
-//Function to build a basic file structure outline of the client machine
-void listFiles(std::vector<char>& outputBuffer, std::string directory)
-{
-	WIN32_FIND_DATA fileData;
-	__int64 filesize = 0;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	//Locates the file information for the specificed directory
-	//Default will be the C:\ Drive
-	hFind = FindFirstFile(directory.c_str(), &fileData);
-	do
-	{
-		//First section handles directories
-		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
-			//String used to build the line showing the directory information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   <DIR>\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Next section handles files
-		else
-		{
-			//Type to hold file size, it is recorded in bytes
-			LARGE_INTEGER data;
-			data.LowPart = fileData.nFileSizeLow;
-			data.HighPart = fileData.nFileSizeHigh;
-			filesize = data.QuadPart;
-			//String used to build the line showing the file information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   ";
-			//Converts the file size to a type that can be printed
-			build += static_cast<std::ostringstream*>(&(std::ostringstream() << filesize))->str();
-			build += " bytes\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Once there are no files to output, return the function
-	} while (FindNextFile(hFind, &fileData) != 0);
-}
-void setDriveLetter(std::string directory)
-{
-	std::string tempDrive;	//temp choice for drive
-	char tempLetter = 'c';
 
-	std::cout << "Current drive is %s." << directory << std::endl; //Displays current drive 
-	std::cout << "Would you like to change drives? ";	//Prompts user for change if desired
-	std::getline(std::cin, tempDrive);//Takes in user's choice 
-	//If users choice is any of the below options, user chooses new letter
-	if (tempDrive == "y" || tempDrive == "Y" || tempDrive == "yes" || tempDrive == "Yes" || tempDrive == "YES")
-	{
-		std::cout << "Enter the new drive letter: ";	//Accepts new drive letter
-		std::cin >> tempLetter;
-		std::cin.clear();
-		//Error checking for new drive letter
-		if (isalpha((int)tempLetter) == false) //checks tempLetter to see if a letter
-		{
-			std::cout << "You entered invalid characters!" << std::endl;
-			setDriveLetter(directory);//invalid character entry recalls setDriveLetter function
-		}
-	}
-	else
-	{
-		directory = ("%c:\\*", toupper((int)tempLetter));//User indicated current drive letter is good.
-	}
-}
-void printSystem(std::vector<char>& outputBuffer)
-{
 
-}
+
