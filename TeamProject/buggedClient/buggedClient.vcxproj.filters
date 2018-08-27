@@ -18,5 +18,16 @@
     <ClCompile Include="buggedClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="setDriveLetter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="processCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
