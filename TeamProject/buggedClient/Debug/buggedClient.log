@@ -1,3 +1,0 @@
-﻿  buggedClient.cpp
-c:\iqtrepo\assignments\teamproject\buggedclient\buggedclient.cpp(37): warning C4101: 'iSendResult': unreferenced local variable
-  buggedClient.vcxproj -> C:\IQTRepo\Assignments\TeamProject\buggedClient\Debug\buggedClient.exe
