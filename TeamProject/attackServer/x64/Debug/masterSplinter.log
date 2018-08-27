@@ -1,0 +1,4 @@
+﻿  ipconfig.cpp
+c:\iqtrepo\assignments\teamproject\attackserver\ipconfig.cpp(15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\iqtrepo\assignments\teamproject\attackserver\ipconfig.cpp(61): warning C4101: 'i': unreferenced local variable
+  masterSplinter.vcxproj -> C:\IQTRepo\Assignments\TeamProject\attackServer\x64\Debug\attackServer.exe
