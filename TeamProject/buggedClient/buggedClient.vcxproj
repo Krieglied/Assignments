@@ -26,9 +26,6 @@
   <ItemGroup>
     <ClInclude Include="client.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="logicalDisks.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{03F49FC8-C75D-4ABB-899F-980838152B1C}</ProjectGuid>

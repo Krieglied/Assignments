@@ -7,6 +7,7 @@ int __cdecl main(int argc, char **argv)
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
 		hints;
+
 	int iResult;
 	int	cmdChoice = 99;
 	std::string inputIP;

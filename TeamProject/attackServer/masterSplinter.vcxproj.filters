@@ -18,7 +18,7 @@
     <ClCompile Include="serverAttack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ipconfig.cpp">
+    <ClCompile Include="IPconfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

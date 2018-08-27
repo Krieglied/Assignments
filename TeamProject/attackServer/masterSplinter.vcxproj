@@ -116,7 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ipconfig.cpp" />
+    <ClCompile Include="IPconfig.cpp" />
     <ClCompile Include="serverAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
