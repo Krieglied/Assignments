@@ -1,5 +1,0 @@
-﻿  serverAttack.cpp
-c:\iqtrepo\assignments\teamproject\attackserver\serverattack.cpp(99): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-c:\iqtrepo\assignments\teamproject\attackserver\serverattack.cpp(126): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-c:\iqtrepo\assignments\teamproject\attackserver\serverattack.cpp(154): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  masterSplinter.vcxproj -> C:\IQTRepo\Assignments\TeamProject\attackServer\x64\Debug\attackServer.exe
