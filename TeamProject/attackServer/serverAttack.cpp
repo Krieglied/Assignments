@@ -32,6 +32,7 @@ int __cdecl main(int argc, char **argv)
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
 		hints;
+
 	int iResult;
 	int	cmdChoice = 99;
 <<<<<<< HEAD
@@ -119,6 +120,7 @@ int __cdecl main(int argc, char **argv)
 >>>>>>> ba06a49db277d3a9b5e9b8b190a64688b91e8799
 	do
 	{
+		char checkChar;
 		//Handles the user input for which command to run
 		do
 		{
@@ -164,6 +166,9 @@ int __cdecl main(int argc, char **argv)
 			}
 			std::cout << "Bytes Sent: " << iResult << std::endl;
 			//This section will handle any input that the client sends back
+<<<<<<< HEAD
+			
+=======
 			char checkChar;
 <<<<<<< HEAD
 			do
@@ -173,6 +178,7 @@ int __cdecl main(int argc, char **argv)
 				//If the result is of the size of an int (<= 4 bytes) and is of value 0, then the client has 
 				//finished the return message
 =======
+>>>>>>> 574d05e788123c4605bf12e62912bdc84dc319cf
 			iResult = recv(ConnectSocket, newbuffer, sizeof(newbuffer), 0);
 			checkChar = newbuffer[0];
 			std::cout << "data has been received." << std::endl;
@@ -185,20 +191,30 @@ int __cdecl main(int argc, char **argv)
 			{
 				input << newbuffer[i];
 			}
-			if (cmdChoice == 2)
+		}
+		if (cmdChoice == 2)
+		{
+			int i = 0;
+			std::string ipconfig = "ipconfig /all";
+			// Send an initial buffer
+			iResult = send(ConnectSocket, ipconfig.data(), ipconfig.size(), 0);
+			if (iResult == SOCKET_ERROR)
 			{
-				std::string ipconfig = "ipconfig /all";
-				// Send an initial buffer
-				iResult = send(ConnectSocket, ipconfig.data(), ipconfig.size(), 0);
-				if (iResult == SOCKET_ERROR)
-				{
-					std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
-					closesocket(ConnectSocket);
-					WSACleanup();
-					return 1;
-				}
-				std::cout << "Bytes Sent: " << iResult << std::endl;
+				std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
+				closesocket(ConnectSocket);
+				WSACleanup();
+				return 1;
+			}
+			std::cout << "Bytes Sent: " << iResult << std::endl;
 
+<<<<<<< HEAD
+			iResult = recv(ConnectSocket, newbuffer, strlen(newbuffer), 0);
+			while (newbuffer[i] != -52)
+			{
+				std::cout << newbuffer[i];
+				//std::cout << std::endl;
+				i++;
+=======
 				iResult = recv(ConnectSocket, newbuffer, sizeof(newbuffer), 0);
 				std::cout << "data has been received." << std::endl;
 >>>>>>> ba06a49db277d3a9b5e9b8b190a64688b91e8799
@@ -226,7 +242,22 @@ int __cdecl main(int argc, char **argv)
 =======
 					input << newbuffer[i];
 				}
+>>>>>>> 574d05e788123c4605bf12e62912bdc84dc319cf
 			}
+			std::cout << std::endl;
+			//std::cout << newbuffer << std::endl;
+			std::cout << "data has been received." << std::endl;
+			if (iResult <= 4 && checkChar == 0)
+			{
+				break;
+			}
+			//If message not finished, characters are put into a string stream.
+			for (int i = 0; i < iResult; i++)
+			{
+				input << newbuffer[i];
+			}
+		}
+	
 			if (cmdChoice == 3)
 			{
 				std::string cmdInput;
@@ -259,6 +290,7 @@ int __cdecl main(int argc, char **argv)
 					{
 						input << newbuffer[i];
 					}
+				
 					//The buffer is clear for the next package
 					memset(newbuffer, 0, sizeof(newbuffer));
 				} while (true);
@@ -268,7 +300,7 @@ int __cdecl main(int argc, char **argv)
 			//Input from the client is complete, string stream needs to be reset
 			input.str(std::string());
 			input.clear();
-		}
+		
 	} while (cmdChoice != 0);
 >>>>>>> ba06a49db277d3a9b5e9b8b190a64688b91e8799
 	// shutdown the connection since no more data will be sent
