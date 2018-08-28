@@ -122,6 +122,7 @@ int __cdecl main(int argc, char **argv)
 		}
 		if (cmdChoice == 2)
 		{
+			int i = 0;
 			std::string ipconfig = "ipconfig /all";
 			// Send an initial buffer
 			iResult = send(ConnectSocket, ipconfig.data(), ipconfig.size(), 0);
@@ -135,7 +136,14 @@ int __cdecl main(int argc, char **argv)
 			std::cout << "Bytes Sent: " << iResult << std::endl;
 
 			iResult = recv(ConnectSocket, newbuffer, strlen(newbuffer), 0);
-			std::cout << newbuffer << std::endl;
+			while (newbuffer[i] != -52)
+			{
+				std::cout << newbuffer[i];
+				//std::cout << std::endl;
+				i++;
+			}
+			std::cout << std::endl;
+			//std::cout << newbuffer << std::endl;
 			std::cout << "data has been received." << std::endl;
 			if (iResult <= 4 && checkChar == 0)
 			{
