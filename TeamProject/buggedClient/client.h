@@ -18,8 +18,6 @@
 #include <string>
 #include <array>
 #include <fstream>
-#include <chrono>
-#include <thread>
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -49,5 +47,4 @@ void printTasks(std::vector<char>& outputBuffer);
 //Function to execute system 
 std::string exec(const char* cmd);
 
-//execute user command
-void userCMD(std::vector<char> buffer, std::vector<char>& outputBuffer);
+

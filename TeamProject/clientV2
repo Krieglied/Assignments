@@ -4,11 +4,19 @@
 #undef UNICODE
 #define WIN32_LEAN_AND_MEAN
 
+#include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <memory>
+#include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
+#include <sstream>
 #include <vector>
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 #include <array>
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -98,6 +106,7 @@ int __cdecl main(void)
 		WSACleanup();
 		return 1;
 	}
+	std::stringstream output;
 	// No longer need listening socket
 	closesocket(ListenSocket);
 	// Receive until the peer shuts down the connection

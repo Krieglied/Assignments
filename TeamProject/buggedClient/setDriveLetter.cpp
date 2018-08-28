@@ -2,12 +2,14 @@
 
 std::string setDriveLetter()
 {
+	exec("wmic logicaldisk get name > logicalDisks.txt");
 	std::string tempDrive;	//temp choice for drive
 	std::string tempLetter;
-	std::string directory = "C:\\*"; 
+	std::string directory = "C:\\*";
+	std::string logicalDisks;	 
 	std::cout << "Available drives" << std::endl;
 	std::cout << "----------------" << std::endl;
-	system("wmic logicaldisk get name");
+	exec("wmic logicaldisk get name");
 	std::cout << "Current drive is " << directory << std::endl; //Displays current drive
 	std::cout << "Would you like to change drives(Y/N)? ";	//Prompts user for change if desired
 	std::getline(std::cin, tempDrive);//Takes in user's choice 
@@ -43,31 +45,49 @@ std::string setDriveLetter()
 			}					
 		}
 	}
-	else if (tempDrive == "n" || tempDrive == "N" || tempDrive == "no" || tempDrive == "No" || tempDrive == "NO")
-	{
-		directory = ("C:\\*");
-	}
 	else
 	{
-		setDriveLetter();
+		directory = ("C:\\*");
 	}
 	return directory;
 }
 
 bool choseAvailableDrive(std::string input)
 {
-	if (input == "c" || input == "C")
-	{
-		return true;
+	std::ifstream diskSelection("logicalDisks.txt");
+	std::string line;
+
+	int driveSet = 0;	//Necessary in order to return false if the drive is not Set
+	if (diskSelection.is_open())
+	{			
+		while (std::getline(diskSelection, line))
+		{
+			if (line == "Name")	//The first line of wmic command is "Name", this will bypass it
+			{
+				if (input[0] == line[0]) //This will pick up the 'N' drive
+				{
+					driveSet = 1;
+					return true;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			else if (input[0] == line[0])	//The drive selected matches the output of wmic command
+			{
+				driveSet = 1;
+				return true;				
+			}
+		}		
+		if (driveSet == 0)
+		{
+			return false;
+		}
+		diskSelection.close();		
 	}
-	else if (input == "d" || input == "D")
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	else 
+		std::cout << "Unable to open file";
 }
 
 bool isLetters(std::string input)
