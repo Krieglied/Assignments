@@ -1,14 +1,10 @@
 #define WIN32_LEAN_AND_MEAN
 
-#include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <iostream>
-#include <vector>
-#include <string>
 #include <sstream>
+#include <vector>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -23,18 +19,18 @@
 void printMenu();
 int userInput(int value);
 
-int __cdecl main(int argc, char **argv)
+int main()
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL,
 		*ptr = NULL,
 		hints;
-	std::vector<char> buffer(5000);
 	int iResult;
 	int	cmdChoice = 99;
 
 	// Initialize Winsock
+	// Very necessary to make the socket work
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0)
 	{
@@ -81,7 +77,7 @@ int __cdecl main(int argc, char **argv)
 	}
 
 	freeaddrinfo(result);
-
+	//Could not get a connection to the client
 	if (ConnectSocket == INVALID_SOCKET)
 	{
 		std::cout << "Unable to connect to server!" << std::endl;
@@ -90,9 +86,12 @@ int __cdecl main(int argc, char **argv)
 	}
 	std::cout << "Ready to start sending commands" << std::endl;
 	std::string commands;
+	//These variables are used to store results from the client
+	std::stringstream input;
+	char buffer[4096 * 2];
 	do
 	{
-		std::vector<char> inputBuffer(5000);
+		//Handles the user input for which command to run
 		do
 		{
 			printMenu();
@@ -105,6 +104,8 @@ int __cdecl main(int argc, char **argv)
 			}
 			//Continue loop until user makes a valid choice
 		} while (!(cmdChoice >= 0 && cmdChoice < 2));
+		// Might make this section a switch case that will build the command string (represented here by test)
+		// That will be sent on the socket to the client
 		if (cmdChoice == 1)
 		{
 			std::string test = "dir";
@@ -118,22 +119,33 @@ int __cdecl main(int argc, char **argv)
 				return 1;
 			}
 			std::cout << "Bytes Sent: " << iResult << std::endl;
-
-			iResult = recv(ConnectSocket, inputBuffer.data(), inputBuffer.size(), 0);
+			//This section will handle any input that the client sends back
+			char checkChar;
+			do
+			{
+				iResult = recv(ConnectSocket, buffer, sizeof(buffer), 0);
+				checkChar = buffer[0];
+				//If the result is of the size of an int (<= 4 bytes) and is of value 0, then the client has 
+				//finished the return message
+				if (iResult <= 4 && checkChar == 0)
+				{
+					break;
+				}
+				//If message not finished, characters are put into a string stream.
+				for (int i = 0; i < iResult; i++)
+				{
+					input << buffer[i];
+				}
+				//The buffer is clear for the next package
+				memset(buffer, 0, sizeof(buffer));
+			} while (true);
+			std::cout << input.str() << std::endl;
 			std::cout << "data has been received." << std::endl;
-			if (iResult != -1)
-			{
-				inputBuffer.resize(iResult);
-			}
-			if (iResult != 0)
-			{
-				std::cout << inputBuffer.data() << std::endl;
-			}
 		}
-		//Here is where test server code will go
+		//Input from the client is complete, string stream needs to be reset
+		input.str(std::string());
+		input.clear();
 	} while (cmdChoice != 0);
-
-	std::cout << "Bytes Sent: " << iResult << std::endl;
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);
@@ -151,12 +163,14 @@ int __cdecl main(int argc, char **argv)
 
 	return 0;
 }
+// Function that will display to the user a list of commands to run on client
 void printMenu()
 {
 	std::cout << "Please select a command:" << std::endl;
 	std::cout << "Test Command (1)" << std::endl;
 	std::cout << "Exit (0)" << std::endl;
 }
+//Determines if the user input a correct command
 int userInput(int value)
 {
 	//Handles user input from the console
