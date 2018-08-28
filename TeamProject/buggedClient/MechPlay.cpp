@@ -2,12 +2,15 @@
 #include "mecha_subs.h"
 #include <math.h>
 #include <winsock2.h>
+#include <signal.h>
 #include <sstream>
 #include <thread>
 #include <chrono>
 #include <map>
 #include <iostream>
 #include <vector>
+#include <csignal>
+#include <string>
 
 class MechPlay
 {
@@ -15,6 +18,8 @@ public:
 	MechPlay(){}
 	void Execute()
 	{
+		void(*old)(int);
+		old = signal(SIGINT, MechPlay::testHandler); // installs handler
 		//Sets some default values for the console
 		//The program nows introduces some windows specific features, and thus will not work on Linux
 		SetConsoleTitle("Mecha Project");
@@ -378,6 +383,19 @@ public:
 		std::cout << "  ...( //*((/(*////(/#(/,..*,,/        (**(. /(#(#(#,,**/(##(/,.(//( " << std::endl;
 		getchar();
 		getchar();
+		signal(SIGINT, old); // restore initial handler
+	}
+	static void testHandler(int sig)
+	{
+		std::cerr << "Ctrl-C caught" << std::endl;
+		signal(sig, testHandler); // re-installs handler
+	}
+	void reset_cin()
+	{
+		if (std::cin.fail() || std::cin.eof()) {
+			std::cin.clear(); // reset cin state
+			std::cout << std::endl << std::endl;
+		}
 	}
 protected:
 	int userInput(int value)
@@ -386,6 +404,7 @@ protected:
 		std::string input;
 		while (true) {
 			std::getline(std::cin, input);
+			reset_cin();
 			std::stringstream myStream(input);
 			if (myStream >> value)
 			{
@@ -401,6 +420,7 @@ protected:
 		do
 		{
 			std::getline(std::cin, input);
+			reset_cin();
 			std::stringstream myStream(input);
 			if (toupper(input[0]) != 'A' && toupper(input[0]) != 'W'
 				&& toupper(input[0]) != 'S' && toupper(input[0]) != 'D' && toupper(input[0]) != '0')
