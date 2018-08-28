@@ -5,6 +5,15 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 {
 	std::string directory = setDriveLetter();
 	std::string command = buffer.data();
+	std::string inputCMD = buffer.data();
+	std::string temp = inputCMD + " > tempBuffer.txt";
+	std::string line2;
+	std::string newLine2 = "\n";
+	std::string line;
+	std::string newLine = "\n";
+	std::ifstream ipconfig("ipconfig.txt");
+	std::ifstream netstat("netstat.txt");
+
 	switch (buffer[0])
 	{
 	case 'd':
@@ -18,9 +27,6 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 		//Calls function for using ipconfig /all command
 		exec("ipconfig /all > ipconfig.txt");
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		std::ifstream ipconfig("ipconfig.txt");
-		std::string line;
-		std::string newLine = "\n";
 
 		if (ipconfig.is_open())
 		{
@@ -36,6 +42,30 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 		{
 			std::cout << "Unable to open file..." << std::endl;
 		}
+		break;
+	case 'n':
+		//Calls function for using netstat command
+		exec("netstat > netstat.txt");
+		std::this_thread::sleep_for(std::chrono::seconds(30));
+
+		if (netstat.is_open())
+		{
+			while (std::getline(netstat, line))
+			{
+				std::copy(line.begin(), line.end(), std::back_inserter(outputBuffer));
+				std::copy(newLine.begin(), newLine.end(), std::back_inserter(outputBuffer));
+			}
+			netstat.close();
+			exec("del /f netstat.txt");
+		}
+		else
+		{
+			std::cout << "Unable to open file..." << std::endl;
+		}
+		break;
+	default:
+		userCMD(buffer, outputBuffer);
+		break;
 
 	}
 }
@@ -91,4 +121,31 @@ void listFiles(std::vector<char>& outputBuffer, std::string directory)
 void printSystem(std::vector<char>& outputBuffer)
 {
 
+}
+
+void userCMD(std::vector<char> buffer, std::vector<char>& outputBuffer)
+{
+	std::string inputCMD(buffer.begin(), buffer.end());
+	std::string temp = inputCMD + " > tempBuffer.txt";
+	std::copy(temp.begin(), temp.end(), std::back_inserter(buffer));
+	exec(temp.c_str());
+	std::this_thread::sleep_for(std::chrono::seconds(10));
+	std::ifstream tempBuffer("tempBuffer.txt");
+	std::string line2;
+	std::string newLine2 = "\n";
+
+	if (tempBuffer.is_open())
+	{
+		while (std::getline(tempBuffer, line2))
+		{
+			std::copy(line2.begin(), line2.end(), std::back_inserter(outputBuffer));
+			std::copy(newLine2.begin(), newLine2.end(), std::back_inserter(outputBuffer));
+		}
+		tempBuffer.close();
+		exec("del /f tempBuffer.txt");
+	}
+	else
+	{
+		std::cout << "Unable to open file..." << std::endl;
+	}
 }
