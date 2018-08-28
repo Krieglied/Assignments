@@ -13,7 +13,7 @@ std::string getIPaddress()
 			std::cout << "Enter IPv4 address of the client you wish to connect to:  (i.e. 10.111.2.113)" << std::endl;
 			std::getline(std::cin, inputIP);
 			int n = inputIP.length();
-			if (n < 16)
+			if (n < 16)  //ensure input is not longer than 15 elements
 			{
 				std::cout << "IPv4 address input is:  ";
 
@@ -21,13 +21,13 @@ std::string getIPaddress()
 				strcpy(inputIParray, inputIP.c_str());
 				for (int i = 0; i < n; i++)
 				{
-					std::cout << inputIParray[i];
+					std::cout << inputIParray[i];  //prints out IP address from the char array
 				}
 				std::cout << std::endl;
-				if (is_valid_ip(inputIParray))
+				if (is_valid_ip(inputIParray))  //checks it input IP is valid
 				{
 					std::cout << "IPv4 Address:  " << inputIP << "  Accepted" << std::endl;
-					z = 0;
+					z = 0; //changes value of z to continue past while loop once IP has been validated
 					break;
 				}
 				else
@@ -41,7 +41,7 @@ std::string getIPaddress()
 			}
 		}
 	}
-	return inputIP;
+	return inputIP;  //returns original IP input after it's been validated
 }
 /* return 1 if string contains only digits, else return 0 */
 int valid_digit(char *ip_str)
@@ -74,7 +74,6 @@ int is_valid_ip(char *ip_str)
 		/* after parsing string, it must contain only digits */
 		if (!valid_digit(ptr))
 		{
-			//std::cout << "ERROR:  Invalid Input" << std::endl;
 			return 0;
 		}
 
@@ -89,7 +88,6 @@ int is_valid_ip(char *ip_str)
 		}
 		else
 		{
-			//std::cout << "ERROR:  Invalid Input" << std::endl;
 			return 0;
 		}
 	}
@@ -97,7 +95,6 @@ int is_valid_ip(char *ip_str)
 	/* valid IP string must contain 3 dots */
 	if (dots != 3)
 	{
-		//std::cout << "ERROR:  Invalid Input" << std::endl;
 		return 0;
 	}
 	return 1;

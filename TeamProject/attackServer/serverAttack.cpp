@@ -24,7 +24,7 @@ int __cdecl main(int argc, char **argv)
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;	
+	hints.ai_protocol = IPPROTO_TCP;
 
 	inputIP = getIPaddress();
 	// Resolve the server address and port
@@ -95,7 +95,7 @@ int __cdecl main(int argc, char **argv)
 
 			// Might make this section a switch case that will build the command string (represented here by test)
 			// That will be sent on the socket to the client
-				// Send an initial buffer
+			// Send an initial buffer
 			iResult = send(ConnectSocket, directory.data(), directory.size(), 0);
 			if (iResult == SOCKET_ERROR)
 			{
@@ -202,7 +202,7 @@ int __cdecl main(int argc, char **argv)
 	WSACleanup();
 
 	return 0;
-	
+
 }
 // Function that will display to the user a list of commands to run on client
 void printMenu()
@@ -229,5 +229,3 @@ int userInput(int value)
 	}
 	return value;
 }
-
-
