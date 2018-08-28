@@ -46,7 +46,6 @@ int main(void)
 	if (iResult != 0)
 	{
 		//std::cout << "WSAStartup failed with error: " << iResult << std::endl;
-		std::cout << "WSAStartup failed with error: " << iResult << std::endl;
 		return 1;
 	}
 
@@ -61,7 +60,6 @@ int main(void)
 	if (iResult != 0)
 	{
 		//std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
-		std::cout << "getaddrinfo failed with error: " << iResult << std::endl;
 		WSACleanup();
 		return 1;
 	}
@@ -71,7 +69,6 @@ int main(void)
 	if (ListenSocket == INVALID_SOCKET)
 	{
 		//std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
-		std::cout << "socket failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(result);
 		WSACleanup();
 		return 1;
@@ -82,7 +79,6 @@ int main(void)
 	if (iResult == SOCKET_ERROR)
 	{
 		//std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
-		std::cout << "bind failed with error: " << WSAGetLastError() << std::endl;
 		freeaddrinfo(result);
 		closesocket(ListenSocket);
 		WSACleanup();
@@ -95,7 +91,6 @@ int main(void)
 	if (iResult == SOCKET_ERROR)
 	{
 		//std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
-		std::cout << "listen failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ListenSocket);
 		WSACleanup();
 		return 1;
@@ -106,7 +101,6 @@ int main(void)
 	if (ServerSocket == INVALID_SOCKET)
 	{
 		//std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
-		std::cout << "accept failed with error: " << WSAGetLastError() << std::endl;
 		closesocket(ListenSocket);
 		WSACleanup();
 		return 1;
@@ -121,7 +115,6 @@ int main(void)
 		//Receives any incoming buffers from the server
 		iResult = recv(ServerSocket, inputBuffer.data(), inputBuffer.size(), 0);
 		//std::cout << "Data has been received." << std::endl;
-		std::cout << "Data has been received." << std::endl;
 		//If the result is not -1, then resize inputBuffer to make sure that it can hold the bytes incoming
 		if (iResult != -1)
 		{
@@ -132,7 +125,6 @@ int main(void)
 		{
 			//Central function that handles switch/cases for all the commands
 			processCommand(inputBuffer, outputBuffer);
-			std::cout << std::endl;
 			char newbuffer[4096 * 2];
 			//If the command asks for a result (at this stage, all will), the result needs to be sent back 
 			//to the server
