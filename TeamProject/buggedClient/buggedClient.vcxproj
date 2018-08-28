@@ -20,14 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buggedClient.cpp" />
-    <ClCompile Include="processCommand.cpp" />
-    <ClCompile Include="setDriveLetter.cpp" />
+    <ClCompile Include="MechPlay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="logicalDisks.txt" />
+    <ClInclude Include="mecha.h" />
+    <ClInclude Include="mecha_subs.h" />
+    <ClInclude Include="MechPlay.h" />
+    <ClInclude Include="weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
