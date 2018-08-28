@@ -18,6 +18,8 @@
 #include <string>
 #include <array>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 #pragma comment (lib, "Ws2_32.lib")
 
