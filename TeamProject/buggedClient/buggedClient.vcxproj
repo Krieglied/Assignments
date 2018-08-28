@@ -23,10 +23,14 @@
     <ClCompile Include="MechPlay.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <ClInclude Include="client.h" />
+=======
     <ClInclude Include="mecha.h" />
     <ClInclude Include="mecha_subs.h" />
     <ClInclude Include="MechPlay.h" />
     <ClInclude Include="weapon.h" />
+>>>>>>> 574d05e788123c4605bf12e62912bdc84dc319cf
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
