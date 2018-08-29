@@ -2,8 +2,7 @@
 
 //Central function that handles switch/cases for all the commands
 void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
-{
-	std::string directory = setDriveLetter();
+{	 
 	std::string command = buffer.data();
 	std::string inputCMD = buffer.data();
 	std::string temp = inputCMD + " > tempBuffer.txt";
@@ -13,20 +12,23 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 	std::string newLine = "\n";
 	std::ifstream ipconfig("ipconfig.txt");
 	std::ifstream netstat("netstat.txt");
+	std::string directory = "C:\\";
 
 	switch (buffer[0])
 	{
 	case 'd':
+		outputBuffer.clear();
 		//Calls the function to list files based on a directory provided
 		//C:\ is used as a default
 		//The outputBuffer has all the files and directory information listed
-		listFiles(outputBuffer, directory);
+		listFiles(buffer, directory, outputBuffer);
 		break;
 
 	case 'i':
+		outputBuffer.clear();
 		//Calls function for using ipconfig /all command
 		exec("ipconfig /all > ipconfig.txt");
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(3));
 
 		if (ipconfig.is_open())
 		{
@@ -38,13 +40,10 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 			ipconfig.close();
 			exec("del /f ipconfig.txt");
 		}
-		else
-		{
-			std::cout << "Unable to open file..." << std::endl;
-		}
 		break;
 	case 'n':
 		//Calls function for using netstat command
+		outputBuffer.clear();
 		exec("netstat > netstat.txt");
 		std::this_thread::sleep_for(std::chrono::seconds(30));
 
@@ -71,9 +70,33 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer)
 }
 
 //Function to build a basic file structure outline of the client machine
-void listFiles(std::vector<char>& outputBuffer, std::string directory)
+void listFiles(std::vector<char>& buffer, std::string directory, std::vector<char>& outputBuffer)
 {
-	WIN32_FIND_DATA fileData;
+	std::string inputCMD(buffer.begin(), buffer.end());
+	std::string temp = inputCMD + " " + directory +" > tempBuffer.txt";
+	//std::string directCMD = directory + " " + temp;
+	std::copy(temp.begin(), temp.end(), std::back_inserter(buffer));
+	exec(temp.c_str());
+	std::this_thread::sleep_for(std::chrono::seconds(10));
+	std::ifstream tempBuffer("tempBuffer.txt");
+	std::string line2;
+	std::string newLine2 = "\n";
+
+	if (tempBuffer.is_open())
+	{
+		while (std::getline(tempBuffer, line2))
+		{
+			std::copy(line2.begin(), line2.end(), std::back_inserter(outputBuffer));
+			std::copy(newLine2.begin(), newLine2.end(), std::back_inserter(outputBuffer));
+		}
+		tempBuffer.close();
+		//exec("del /f tempBuffer.txt");
+	}
+	else
+	{
+		std::cout << "Unable to open file..." << std::endl;
+	}
+	/*WIN32_FIND_DATA fileData;
 	__int64 filesize = 0;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	//Locates the file information for the specificed directory
@@ -114,7 +137,7 @@ void listFiles(std::vector<char>& outputBuffer, std::string directory)
 			}
 		}
 		//Once there are no files to output, return the function
-	} while (FindNextFile(hFind, &fileData) != 0);
+	} while (FindNextFile(hFind, &fileData) != 0);*/
 }
 
 

@@ -2,14 +2,13 @@
 
 std::string setDriveLetter()
 {
-	exec("wmic logicaldisk get name > logicalDisks.txt");
 	std::string tempDrive;	//temp choice for drive
 	std::string tempLetter;
-	std::string directory = "C:\\*";
+	std::string directory = "C:\\";
 	std::string logicalDisks;	 
 	std::cout << "Available drives" << std::endl;
 	std::cout << "----------------" << std::endl;
-	exec("wmic logicaldisk get name");
+	system("wmic logicaldisk get name");
 	std::cout << "Current drive is " << directory << std::endl; //Displays current drive
 	std::cout << "Would you like to change drives(Y/N)? ";	//Prompts user for change if desired
 	std::getline(std::cin, tempDrive);//Takes in user's choice 
@@ -32,14 +31,14 @@ std::string setDriveLetter()
 			{
 				if (tempLetter[0] > 64 && tempLetter[0] <= 90) //Checks if letter is already uppercase
 				{
-					std::string newDirectory = tempLetter + ":\\*"; //Builds directory structure
+					std::string newDirectory = tempLetter + ":\\"; //Builds directory structure
 					directory = newDirectory; //sets return directory equal the one built above
 				}
 				else if (tempLetter[0] > 96 && tempLetter[0] <= 122)
 				{
 					char castLetter = tempLetter[0] - 32; //castLetter is a temp variable, to allow string character to change to uppercase
 					tempLetter[0] = castLetter;	//This is to set tempLetter equal to the Uppercase letter above
-					std::string newDirectory = tempLetter + ":\\*";	//Builds directory structure
+					std::string newDirectory = tempLetter + ":\\";	//Builds directory structure
 					directory = newDirectory; //sets return directory equal the one built above
 				}
 			}					
@@ -47,47 +46,25 @@ std::string setDriveLetter()
 	}
 	else
 	{
-		directory = ("C:\\*");
+		directory = ("C:\\");
 	}
 	return directory;
 }
 
 bool choseAvailableDrive(std::string input)
 {
-	std::ifstream diskSelection("logicalDisks.txt");
-	std::string line;
-
-	int driveSet = 0;	//Necessary in order to return false if the drive is not Set
-	if (diskSelection.is_open())
-	{			
-		while (std::getline(diskSelection, line))
-		{
-			if (line == "Name")	//The first line of wmic command is "Name", this will bypass it
-			{
-				if (input[0] == line[0]) //This will pick up the 'N' drive
-				{
-					driveSet = 1;
-					return true;
-				}
-				else
-				{
-					continue;
-				}
-			}
-			else if (input[0] == line[0])	//The drive selected matches the output of wmic command
-			{
-				driveSet = 1;
-				return true;				
-			}
-		}		
-		if (driveSet == 0)
-		{
-			return false;
-		}
-		diskSelection.close();		
+	if (input == "c" || input == "C")
+	{
+		return true;
 	}
-	else 
-		std::cout << "Unable to open file";
+	else if (input == "d" || input == "D")
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool isLetters(std::string input)

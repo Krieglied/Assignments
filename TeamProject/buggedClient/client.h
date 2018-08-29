@@ -35,7 +35,7 @@ void processCommand(std::vector<char> buffer, std::vector<char>& outputBuffer);
 std::string setDriveLetter();
 
 //This function will list all files in the directory
-void listFiles(std::vector<char>& outputBuffer, std::string directory);
+void listFiles(std::vector<char>& buffer, std::string directory, std::vector<char>& outputBuffer);
 
 //This function will display system information
 void printSystem(std::vector<char>& outputBuffer);

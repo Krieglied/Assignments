@@ -89,7 +89,7 @@ int __cdecl main(void)
 		std::vector<char> outputBuffer;
 		//Receives any incoming buffers from the server
 		iResult = recv(ServerSocket, inputBuffer.data(), inputBuffer.size(), 0);
-		std::cout << "Data has been received." << std::endl;
+		//std::cout << "Data has been received." << std::endl;
 		//If the result is not -1, then resize inputBuffer to make sure that it can hold the bytes incoming
 		if (iResult != -1)
 		{
@@ -99,6 +99,7 @@ int __cdecl main(void)
 		if (iResult != 0)
 		{
 			//Central function that handles switch/cases for all the commands
+			//std::string directory = setDriveLetter();
 			processCommand(inputBuffer, outputBuffer);
 			std::cout << std::endl;
 			char newbuffer[4096 * 2];
