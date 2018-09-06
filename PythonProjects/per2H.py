@@ -43,7 +43,7 @@ while True:
         if moreGrades != "Y":
             break
         #Once all the grades are received, the list is sorted
-        student_grades.sort()
+    student_grades.sort(reverse=True)
     #Once the grades are done, the student and his/her grades is put
     #Into the dictionary
     students_list[student_name] = student_grades
