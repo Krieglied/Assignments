@@ -9,14 +9,13 @@
 """
 import time
 #Recursive function that outputs the final number in the fibonacci sequence
-def rec_fibo(numbers):
-    if numbers < 2:
-        return numbers
-    else:
-        return rec_fibo(numbers-2)+rec_fibo(numbers-1)
+def rec_fibo(numbers, fibo_computed = {0:0, 1:1}):
+    if numbers not in fibo_computed:
+        fibo_computed[numbers] = rec_fibo(numbers -1, fibo_computed) + rec_fibo(numbers-2, fibo_computed)
+    return fibo_computed[numbers]
 
 #Numbers of fibonacci sequence to display
-numbers = 20
+numbers = 100
 first = 1
 second = 1
 current = 0
