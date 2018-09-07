@@ -26,7 +26,7 @@ def studentCode():
     for i in readString:
         finalString += unichr(ord(i) ^ ord(unichr(key)))
     # Replace either the return or reassign your unencrypted string to finalString
-
+    file.close()
     return finalString
 
 studentSTR = studentCode()
