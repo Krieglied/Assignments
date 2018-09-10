@@ -9,7 +9,6 @@
     numbers... print the number.
 """
 counter = 100
-output = ""
 #Numbers from 1 to 100 are evaluated
 for i in range(1, counter + 1):
     #print 'Fizz' * (i % 3 == 0) + 'Buzz' * (i % 5 == 0) or i
