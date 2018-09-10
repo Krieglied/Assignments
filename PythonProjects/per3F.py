@@ -9,8 +9,9 @@
     numbers... print the number.
 """
 counter = 100
-output = ""
 #Numbers from 1 to 100 are evaluated
 for i in range(1, counter + 1):
     #print 'Fizz' * (i % 3 == 0) + 'Buzz' * (i % 5 == 0) or i
-    print i if (i % 3 != 0 and i % 5 != 0) else ("FizzBuzz" if (i % 3 == 0 and i % 5 == 0) else ("Fizz" if (i % 3 == 0) else "Buzz"))
+    print (i if (i % 3 != 0 and i % 5 != 0) 
+        else ("FizzBuzz" if (i % 3 == 0 and i % 5 == 0) 
+        else ("Fizz" if (i % 3 == 0) else "Buzz")))
