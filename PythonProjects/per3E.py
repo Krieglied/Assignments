@@ -8,14 +8,15 @@
     recursive function.
 """
 import time
+import sys
 #Recursive function that outputs the final number in the fibonacci sequence
 def rec_fibo(numbers, fibo_computed = {0:0, 1:1}):
     if numbers not in fibo_computed:
         fibo_computed[numbers] = rec_fibo(numbers -1, fibo_computed) + rec_fibo(numbers-2, fibo_computed)
     return fibo_computed[numbers]
-
+sys.setrecursionlimit(5000)
 #Numbers of fibonacci sequence to display
-numbers = 100
+numbers = int(sys.argv[1])
 first = 1
 second = 1
 current = 0
