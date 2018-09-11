@@ -32,14 +32,22 @@ def print_loop():
     print("Available operators are +,-,/,*,^,F,!")
     print("For +,-,/,*,^: the format is number operator number")
     print("For F, !: the format is number operator")
-def operations_loop():
+def operations_loop(output):
     #Default variables and operators
     operator_list = ["+", "-", "/", "*","^", "F", "!"]
     first = 0
     second = 0
     operator = ""
     while True:
-        input_values = raw_input().split()
+        #If the loop is a fresh one, then the inputs are processed
+        #normally
+        if output == 0:
+            input_values = raw_input().split()
+        #If the user is using a previous loop's result, then the 
+        #result is presented, and stored to be used
+        else:
+            input_values = raw_input("{} ".format(output)).split()
+            input_values.insert(0, output)
         #If too many entries are put in, or an invalid operator is received
         #The loop repeats and the user is prompted for input again
         if len(input_values) > 3 or input_values[1] not in operator_list:
@@ -86,17 +94,39 @@ def operations_loop():
     if operator == "!":
         fact = lambda x: 1 if x == 0 else x * fact(x - 1)
     if operator in ["+", "-", "/", "*", "^"]:
+        output = x(first, second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, x(first, second))
+                first, operator, second, output)
     if operator is "F":
+        output = x(first)
         print("The fibonacci number at position {} is {}").format(
-                first, x(first))
+                first, output)
     if operator is "!":
+        output = fact(first)
         print("{} {} is {}").format(
-                first, operator, fact(first))
-
+                first, operator, output)
+    return output
 
 print("CALCULATOR")
-print_loop()
-#Further line will be added here for the algorithms available
-operations_loop()
+result = 0
+while True:
+    print_loop()
+    #Call to the processing loop
+    result = operations_loop(result)
+    user_choice = ""
+    #Here the user is presented with the choice of using the result
+    #for the next loop, starting a fresh computation loop, or exiting
+    #the program
+    while True:
+        print("Do you wish to clear the calculator (CLR), continue to use"),
+        print("the value just return (CON), or exit the program (EXIT)?")
+        user_choice = raw_input("::: ")
+        if user_choice.upper() in ["CLR", "CON", "EXIT"]:
+            break
+        else:
+            print("Please select a valid choice.")
+    if user_choice.upper() == "EXIT":
+        break
+    #If the user clears the result, it needs to be zeroed for the next loop
+    if user_choice.upper() == "CLR":
+        result = 0
