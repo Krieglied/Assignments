@@ -58,67 +58,70 @@ def factorial(numbers):
         return 1
     else:
         return numbers * factorial(numbers - 1)
+def operations_loop():
+    #Default variables and operators
+    operator_list = ["+", "-", "/", "*","^", "F", "!"]
+    first = 0
+    second = 0
+    operator = ""
+    while True:
+        input_values = raw_input().split()
+        #If too many entries are put in, or an invalid operator is received
+        #The loop repeats and the user is prompted for input again
+        if len(input_values) > 3 or input_values[1] not in operator_list:
+            print_loop()
+            continue
+        if len(input_values) >= 2:
+            #The values are assigned and checked into their variables
+            first = value_verify(input_values[0])
+            operator = input_values[1]
+        #If the number of arguments is 3, then the second number
+        #needs to be captured
+        if len(input_values) == 3:
+            second = value_verify(input_values[2])
+        #If the number of arguments is 2 and the operator provided is 
+        #either not F or !, then user needs to provide arguments again
+        if ((len(input_values) == 2 ) and (operator is not "F"
+            and operator is not "!" )):
+            print("test")
+            print("Incorrect values and operators.")
+            print_loop()
+            continue
+        #For divison, if the second number is 0, then that is invalid
+        #The user is prompted for a valid input
+        if (operator == "/" and second == 0):
+            print("This will cause division by 0.")
+            print_loop()
+            continue
+        break
+    #Once the user has given valid inputs, then the function output
+    #will be printed
+    #Functions
+    print("Function output")
+    if operator == "+":
+        print("The result of {} {} {} is {}").format(
+                first, operator, second, add_numbers(first, second))
+    if operator == "-":
+        print("The result of {} {} {} is {}").format(
+                first, operator, second, x(first, second))
+    if operator == "/":
+        print("The result of {} {} {} is {}").format(
+                first, operator, second, divide_numbers(first, second))
+    if operator == "*":
+        print("The result of {} {} {} is {}").format(
+                first, operator, second, multiply_numbers(first, second))
+    if operator == "^":
+        print("The result of {} {} {} is {}").format(
+                first, operator, second, expo_numbers(first, second))
+    if operator == "F":
+        print("The fibonacci number at position {} is {}").format(
+                first, fibonacci(first))
+    if operator == "!":
+        print("{} {} is {}").format(
+                first, operator, factorial(first))
+
 
 print("CALCULATOR")
 print_loop()
 #Further line will be added here for the algorithms available
-#Default variables and operators
-operator_list = ["+", "-", "/", "*","^", "F", "!"]
-first = 0
-second = 0
-operator = ""
-while True:
-    input_values = raw_input().split()
-    #If too many entries are put in, or an invalid operator is received
-    #The loop repeats and the user is prompted for input again
-    if len(input_values) > 3 or input_values[1] not in operator_list:
-        print_loop()
-        continue
-    if len(input_values) >= 2:
-        #The values are assigned and checked into their variables
-        first = value_verify(input_values[0])
-        operator = input_values[1]
-    #If the number of arguments is 3, then the second number
-    #needs to be captured
-    if len(input_values) == 3:
-        second = value_verify(input_values[2])
-    #If the number of arguments is 2 and the operator provided is 
-    #either not F or !, then user needs to provide arguments again
-    if ((len(input_values) == 2 ) and (operator is not "F" 
-        and operator is not "!" )):
-        print("test")
-        print("Incorrect values and operators.")
-        print_loop()
-        continue
-    #For divison, if the second number is 0, then that is invalid
-    #The user is prompted for a valid input
-    if (operator == "/" and second == 0):
-        print("This will cause division by 0.")
-        print_loop()
-        continue
-    break
-#Once the user has given valid inputs, then the function output
-#will be printed
-#Functions
-print("Function output")
-if operator == "+":
-    print("The result of {} {} {} is {}").format(
-            first, operator, second, add_numbers(first, second))
-if operator == "-":
-    print("The result of {} {} {} is {}").format(
-            first, operator, second, x(first, second))
-if operator == "/":
-    print("The result of {} {} {} is {}").format(
-            first, operator, second, divide_numbers(first, second))
-if operator == "*":
-    print("The result of {} {} {} is {}").format(
-            first, operator, second, multiply_numbers(first, second))
-if operator == "^":
-    print("The result of {} {} {} is {}").format(
-            first, operator, second, expo_numbers(first, second))
-if operator == "F":
-    print("The fibonacci number at position {} is {}").format(
-            first, fibonacci(first))
-if operator == "!":
-    print("{} {} is {}").format(
-            first, operator, factorial(first))
+operations_loop()
