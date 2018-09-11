@@ -50,7 +50,8 @@ def expo_numbers(first, second):
 #Function that computes the fibonacci number at postion numbers
 def fibonacci(numbers, computed = {0:0, 1:1}):
     if numbers not in computed:
-        computed[numbers] = fibonacci(numbers -1, computed) + fibonacci(numbers-2, computed)
+        computed[numbers] = (fibonacci(numbers -1, computed) 
+        + fibonacci(numbers-2, computed))
     return computed[numbers]
 #Function that computes numbers!
 def factorial(numbers):
@@ -58,14 +59,23 @@ def factorial(numbers):
         return 1
     else:
         return numbers * factorial(numbers - 1)
-def operations_loop():
+#This function handles the actual processing of numbers provided
+def operations_loop(output):
     #Default variables and operators
     operator_list = ["+", "-", "/", "*","^", "F", "!"]
     first = 0
     second = 0
     operator = ""
     while True:
-        input_values = raw_input().split()
+        #If the loop is a fresh one, then the inputs are processed
+        #normally
+        if output == 0:
+            input_values = raw_input().split()
+        #If the user is using a previous loop's result, then the 
+        #result is presented, and stored to be used
+        else:
+            input_values = raw_input("{} ".format(output)).split()
+            input_values.insert(0, output)
         #If too many entries are put in, or an invalid operator is received
         #The loop repeats and the user is prompted for input again
         if len(input_values) > 3 or input_values[1] not in operator_list:
@@ -99,29 +109,58 @@ def operations_loop():
     #Functions
     print("Function output")
     if operator == "+":
+        output = add_numbers(first,second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, add_numbers(first, second))
+                first, operator, second, output)
     if operator == "-":
+        output = sub_numbers(first,second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, x(first, second))
+                first, operator, second, output)
     if operator == "/":
+        output = divide_numbers(first, second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, divide_numbers(first, second))
+                first, operator, second, output)
     if operator == "*":
+        output = multiply_numbers(first, second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, multiply_numbers(first, second))
+                first, operator, second, output)
     if operator == "^":
+        output = expo_numbers(first, second)
         print("The result of {} {} {} is {}").format(
-                first, operator, second, expo_numbers(first, second))
+                first, operator, second, output)
     if operator == "F":
+        output = fibonacci(first)
         print("The fibonacci number at position {} is {}").format(
-                first, fibonacci(first))
+                first, output)
     if operator == "!":
+        output = factorial(first)
         print("{} {} is {}").format(
-                first, operator, factorial(first))
+                first, operator, output)
+    #The result needs to be sent back, to be evaluated possibly
+    #for the next loop
+    return output
 
 
 print("CALCULATOR")
-print_loop()
-#Further line will be added here for the algorithms available
-operations_loop()
+result = 0
+while True:
+    print_loop()
+    #Call to the processing loop
+    result = operations_loop(result)
+    user_choice = ""
+    #Here the user is presented with the choice of using the result
+    #for the next loop, starting a fresh computation loop, or exiting
+    #the program
+    while True:
+        print("Do you wish to clear the calculator (CLR), continue to use"),
+        print("the value just return (CON), or exit the program (EXIT)?")
+        user_choice = raw_input("::: ")
+        if user_choice.upper() in ["CLR", "CON", "EXIT"]:
+            break
+        else:
+            print("Please select a valid choice.")
+    if user_choice.upper() == "EXIT":
+        break
+    #If the user clears the result, it needs to be zeroed for the next loop
+    if user_choice.upper() == "CLR":
+        result = 0
