@@ -18,7 +18,7 @@ def print_loop():
 #Function that processes the user input and then converts the input
 #into a postfix expression that will return a result
 def operations_loop():
-    input_line = raw_input("Please input a math line\n")
+    input_line = raw_input("Please input a math line\n").rstrip()
     operator_list = ["(", ")", "!", "F", "^", "/", "*", "+", "-"]
     operator_stack = []
     transform_stack = []
@@ -130,7 +130,7 @@ while True:
     #the program
     while True:
         print("Do you wish to continue (CON), or exit the program (EXIT)?")
-        user_choice = raw_input("::: ")
+        user_choice = raw_input("::: ").rstrip()
         if user_choice.upper() in ["CON", "EXIT"]:
             break
         else:
