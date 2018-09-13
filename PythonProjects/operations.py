@@ -17,6 +17,9 @@ def print_loop():
 #Function that processes the user input and then converts the input
 #into a postfix expression that will return a result
 def operations_loop():
+    operator_list = ["(", ")", "!", "F", "^", "/", "*", "+", "-"]
+    postfix_stack = []
+    transform_stack = []
     operator_stack = calcinput.expression_input()
     #This loop will convert the string provided to a postfix
     #expression
@@ -87,4 +90,3 @@ def operations_loop():
                 transform_stack.append(result)
         #Last item on the stack should be the result
         print(transform_stack.pop())
-
