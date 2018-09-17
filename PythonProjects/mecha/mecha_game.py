@@ -16,11 +16,13 @@ import math
 from mecha_sub import Hellbringer,MadDog,Summoner,TimberWolf,Warhammer
 from mecha_sub import Kodiak,StoneRhino,Mauler
 from mecha import Mecha
-
+# Used to validate that the user input an int and its within the list value range
 def int_validation(choices):
     user_input = raw_input(":::")
     try:
         user_input = int(user_input)
+    # If the value provided is neither an int or with the range
+    # The function is recursively called until that condition is met
     except ValueError:
         print("Not a valid int.")
         user_input = int_validation(choices)
@@ -28,6 +30,7 @@ def int_validation(choices):
         print("Please select a valid choice")
         user_input = int_validation(choices)
     return user_input
+# Checks that the user input a correct move choice
 def move_validation():
     user_input = raw_input(":::")
     if (user_input.upper() != "A" and user_input.upper() != "W" 
@@ -36,6 +39,7 @@ def move_validation():
         print("Invalid choice, please try again.")
         user_input = move_validation()
     return user_input
+# List of functions that handle moving the mech within the grid
 def moveLeft(x,y,grid):
     if ((x - 1 > 0) and (grid[y][x - 1] == 0)):
         grid[y][x - 1] = grid[y][x]
@@ -79,6 +83,7 @@ def moveRight(x,y,grid):
 def stay():
     print("No move to perform")
     return True
+# Processes the user's choice of move, return False if the move is not valid
 def checkMove(move_choice, location, grid):
     x = location[0]
     y = location[1]
@@ -94,6 +99,7 @@ def checkMove(move_choice, location, grid):
     else:
         moves = stay()
     return moves
+# Uses pythagoras theorem to compute distance between mechs
 def computeDistance(location, opplocation):
     distance = 0
     a = opplocation[0] - location[0]
@@ -112,6 +118,7 @@ game_over =  False
 mechs = [None] * 2
 rows = 20
 columns = 20
+# Field that the mechs fight on
 grid = [[0 for x in range(columns)] for y in range(rows)]
 
 for i in range(len(mechs)):
@@ -145,7 +152,9 @@ for i in range(len(mechs)):
 grid[5][10] = mechs[0]
 grid[10][10] = mechs[1]
 
+# Game loop, goes until one player wins
 while game_over is not True:
+    # If the player's mech is overheated, their turn is skipped
     if (mechs[0].over_heated if player else mechs[1].over_heated):
         print("Your mech is overheated.  You have to wait a turn.")
         time.sleep(2)
@@ -158,6 +167,7 @@ while game_over is not True:
         location = []
         opplocation = []
         weapon_choice = 0
+        # Prints the field
         for x in xrange(len(grid)):
             for y in xrange(len(grid[x])):
                 if grid[x][y] is 0:
@@ -182,6 +192,7 @@ while game_over is not True:
         print("Player {}\n").format(1 if player else 2)
         mechs[0].displayMainStats() if player else mechs[1].displayMainStats()
         print("")
+        # Handles the player movement
         while True:
             print("Player {} which direction would").format(1 if player else 2),
             print("you like to move (A:W:S:D) or 0 if you don't want to move:")
@@ -190,6 +201,7 @@ while game_over is not True:
                 break
         distance = computeDistance(location, opplocation)
         print("Player {}, select which weapon to use:").format(1 if player else 2)
+        # Only displays if there is a available at this range to fire
         if ((not mechs[0].displayStats(distance)) if player 
                 else not mechs[1].displayStats(distance)):
             player = not player
