@@ -7,7 +7,7 @@
 
 import time
 import random
-from weapon import *
+from weapon import Weapon
 # Base Class for all mechs
 class Mecha(object):
     def __init__(self, wset, mtype, echance, lchance, nchance, hp, hsink):
@@ -73,9 +73,9 @@ class Mecha(object):
         if selected.weapon_range < distance:
             return damage_total
         if selected.weapon_type not in damage_total:
-            damage_total[selected.weapon_type] = int(dbonus * selected.damage)
+            damage_total[selected.weapon_type] = int(dbonus * selected.fireWeapon())
         else:
-            damage_total[selected.weapon_type] += int(dbonus * selected.damage)
+            damage_total[selected.weapon_type] += int(dbonus * selected.fireWeapon())
         return damage_total
     # All weapons that match the selected weapon are fired
     def linkedWeaponsFire(self, selected):
@@ -95,12 +95,12 @@ class Mecha(object):
     def releasePayload(self, index, distance):
         damage_total = {}
         displayed = []
-        postion = 0
+        position = 0
         location = 0
         for weapon in self.weapon_set:
             if weapon.weapon_name not in displayed:
                 displayed.append(weapon.weapon_name)
-                if postion == index:
+                if position == index:
                     break
                 position += 1
             location += 1
@@ -108,7 +108,7 @@ class Mecha(object):
         chance = random.randint(1, 101) 
         if chance <= self.normal_chance:
             self.soakHeat(selected.heat_cost)
-            damage_total[selected.weapon_type] = selected.damage
+            damage_total[selected.weapon_type] = selected.fireWeapon()
             return damage_total
         elif chance <= (self.normal_chance + self.linked_chance):
             print("Focus Fire!!")
@@ -122,10 +122,10 @@ class Mecha(object):
             time.sleep(2)
             print("EVERYONE!!!!")
             time.sleep(2)
-            return fireAllWeapons(1, 0.75, distance)
+            return self.fireAllWeapons(1, 0.75, distance)
         else:
             print("Initiating.....")
             time.sleep(2)
             print("Death Blossom")
             time.sleep(2)
-            return fireAllWeapons(1.5, 2, distance)
+            return self.fireAllWeapons(1.5, 2, distance)

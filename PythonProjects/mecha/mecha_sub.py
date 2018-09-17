@@ -35,7 +35,7 @@ class Hellbringer(Mecha):
             if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_value
+                self.hit_points -= damage_value
         return False
 
 class MadDog(Mecha):
@@ -57,14 +57,14 @@ class MadDog(Mecha):
         weapon_set.append(LargePLaser())
         weapon_set.append(LargePLaser())
         return weapon_set
-    def computeDamageReceived(damage_total):
-        for damage_type in damage_total:
-            if damage_type.key == "L":
-                damage_type.value -= 5
-            if(self.hit_points - damage_type.value < 0):
+    def computeDamageReceived(self, damage_total):
+        for damage_type, damage_value in damage_total.iteritems():
+            if damage_type == "L":
+                damage_value -= 5
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
 
 class Summoner(Mecha):
@@ -83,19 +83,19 @@ class Summoner(Mecha):
         weapon_set.append(LRM())
         weapon_set.append(PPC())
         return weapon_set
-    def computeDamageReceived(damage_total):
+    def computeDamageReceived(self, damage_total):
         if len(damage_total) > 1:
             if self.hit_points - 10 < 0:
-                return true
+                return True
             else:
                 self.hit_points -= 10
-                return false
+                return False
         else:
-            for damage_type in damage_total:
-                if(self.hit_points - damage_type.value < 0):
+            for damage_type, damage_value in damage_total.iteritems():
+                if(self.hit_points - damage_value < 0):
                     return True
                 else:
-                    self.hit_points -= damage_type.value
+                    self.hit_points -= damage_value
                     return False
 
 class TimberWolf(Mecha):
@@ -118,14 +118,14 @@ class TimberWolf(Mecha):
         weapon_set.append(LRM())
         weapon_set.append(LRM())
         return weapon_set
-    def computeDamageReceived(damage_total):
-        for damage_type in damage_total:
-            if damage_type.key == "M":
-                damage_type.value -= 5
-            if(self.hit_points - damage_type.value < 0):
+    def computeDamageReceived(self, damage_total):
+        for damage_type, damage_value in damage_total.iteritems():
+            if damage_type == "M":
+                damage_value -= 5
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
 
 class Warhammer(Mecha):
@@ -149,14 +149,14 @@ class Warhammer(Mecha):
         weapon_set.append(MedPLaser())
         weapon_set.append(SRM())
         return weapon_set
-    def computeDamageReceived(damage_total):
-        for damage_type in damage_total:
-            if damage_type.key == "K":
-                damage_type.value -= 5
-            if(self.hit_points - damage_type.value < 0):
+    def computeDamageReceived(self, damage_total):
+        for damage_type, damage_value in damage_total.iteritems():
+            if damage_type == "K":
+                damage_value -= 5
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
 
 class Kodiak(Mecha):
@@ -184,14 +184,14 @@ class Kodiak(Mecha):
         weapon_set.append(ERMedLaser())
         weapon_set.append(ERMedLaser())
         return weapon_set
-    def computeDamageReceived(damage_total):
-        for damage_type in damage_total:
-            if damage_type.key == "R":
-                damage_type.value -= 5
-            if(self.hit_points - damage_type.value < 0):
+    def computeDamageReceived(self, damage_total):
+        for damage_type, damage_value in damage_total.iteritems():
+            if damage_type == "R":
+                damage_value -= 5
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
 
 class StoneRhino(Mecha):
@@ -212,14 +212,14 @@ class StoneRhino(Mecha):
         weapon_set.append(LargePLaser())
         weapon_set.append(SmallPLaser())
         return weapon_set
-    def computeDamageReceived(damage_total):
-        for damage_type in damage_total:
-            if damage_type.key == "R" or damage_type.key == "L":
-                damage_type.value -= 5
-            if(self.hit_points - damage_type.value < 0):
+    def computeDamageReceived(self, damage_total):
+        for damage_type, damage_value in damage_total.iteritems():
+            if damage_type == "R" or damage_type == "L":
+                damage_value -= 5
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
 
 class Mauler(Mecha):
@@ -243,14 +243,14 @@ class Mauler(Mecha):
         weapon_set.append(AC())
         weapon_set.append(AC())
         return weapon_set
-    def computeDamageReceived(damage_total):
+    def computeDamageReceived(self, damage_total):
         resist = True
-        for damage_type in damage_total:
+        for damage_type, damage_value in damage_total.iteritems():
             if resist:
-                damage_type.value -= 5
+                damage_value -= 5
                 resist = not resist
-            if(self.hit_points - damage_type.value < 0):
+            if(self.hit_points - damage_value < 0):
                 return True
             else:
-                    self.hit_points -= damage_type.value
+                self.hit_points -= damage_value
         return False
