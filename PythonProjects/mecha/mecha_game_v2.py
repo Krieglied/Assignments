@@ -50,8 +50,12 @@ def move_validation():
         print("Invalid choice, please try again.")
         user_input = move_validation()
     return user_input
+# game_movement.py
+
 # List of functions that handle moving the mech within the grid
-def moveLeft(x,y,grid):
+def moveLeft(location,grid):
+    x = location[0]
+    y = location[1]
     if ((x - 1 > 0) and (grid[y][x - 1] == 0)):
         grid[y][x - 1] = grid[y][x]
         grid[y][x] = 0
@@ -61,7 +65,9 @@ def moveLeft(x,y,grid):
     else:
         print("Illegal move.  Try Again.")
         return False
-def moveUp(x,y,grid):
+def moveUp(location,grid):
+    x = location[0]
+    y = location[1]
     if ((y - 1 > 0) and (grid[y - 1][x] == 0)):
         grid[y - 1][x] = grid[y][x]
         grid[y][x] = 0
@@ -71,7 +77,9 @@ def moveUp(x,y,grid):
     else:
         print("Illegal move.  Try Again.")
         return False
-def moveDown(x,y,grid):
+def moveDown(location,grid):
+    x = location[0]
+    y = location[1]
     if ((y + 1 > 0) and (grid[y + 1][x] == 0)):
         grid[y + 1][x] = grid[y][x]
         grid[y][x] = 0
@@ -81,7 +89,9 @@ def moveDown(x,y,grid):
     else:
         print("Illegal move.  Try Again.")
         return False
-def moveRight(x,y,grid):
+def moveRight(location,grid):
+    x = location[0]
+    y = location[1]
     if ((x + 1 > 0) and (grid[y][x + 1] == 0)):
         grid[y][x + 1] = grid[y][x]
         grid[y][x] = 0
@@ -96,17 +106,15 @@ def stay():
     return True
 # Processes the user's choice of move, return False if the move is not valid
 def checkMove(move_choice, location, grid):
-    x = location[0]
-    y = location[1]
     moves = True
     if move_choice == "A":
-        moves = moveLeft(x,y,grid)
+        moves = moveLeft(location,grid)
     elif move_choice == "W":
-        moves = moveUp(x,y,grid)
+        moves = moveUp(location,grid)
     elif move_choice == "S":
-        moves = moveDown(x,y,grid)
+        moves = moveDown(location,grid)
     elif move_choice == "D":
-        moves = moveRight(x,y,grid)
+        moves = moveRight(location,grid)
     else:
         moves = stay()
     return moves
