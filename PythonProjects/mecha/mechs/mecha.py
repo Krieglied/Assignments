@@ -10,7 +10,7 @@ import random
 from weapons.weapon import Weapon
 # Base Class for all mechs
 class Mecha(object):
-    def __init__(self, wset, mtype, echance, lchance, nchance, hp, hsink):
+    def __init__(self, wset = [], mtype = "", echance = 0, lchance = 0, nchance = 0, hp = 0, hsink = 0):
         # Loadout for the particular mech
         self.weapon_set = wset
         self.mecha_type = mtype
