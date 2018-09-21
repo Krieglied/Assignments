@@ -1,5 +1,5 @@
-# lab1A-server.py
-# Networking Lab 1-2A
+# lab1B-server.py
+# Networking Lab 1-2B
 # Robert John Graham III
 # September 19 2018
 
