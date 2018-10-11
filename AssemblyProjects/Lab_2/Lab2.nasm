@@ -1,3 +1,9 @@
+; Name: Robert John Graham III
+; Date: 11 Oct 18
+; Project: Lab2
+
+; vim: set filetype=nasm :
+
 bits 64
 
 extern value
@@ -6,7 +12,9 @@ global first_func, second_func
 first_func:
     mov rax, -1
     mov rcx, -1
-    mov cl, 0x04
+    mov cl,; Name: Robert John Graham III
+; Date: 10 Oct 18
+; Project: Lab1 0x04
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  For this task, you must move
 ;  the first byte of RCX into

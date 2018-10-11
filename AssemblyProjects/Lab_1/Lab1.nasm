@@ -1,3 +1,7 @@
+; Name: Robert John Graham III
+; Date: 10 Oct 18
+; Project: Lab1
+
 ; vim: set filetype=nasm :
 bits 64
 
