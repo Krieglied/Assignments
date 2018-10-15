@@ -68,7 +68,8 @@ second_func:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mov rax, 0 
+mov rax, 0
+mov rcx, 1 
 add rax, rdx
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
