@@ -23,8 +23,13 @@ first_func:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mov al, 128
-rol al, 1
+;mov al, 128
+;rol al, 1
+pushf
+pop rax
+or rax, 1
+push rax
+popf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,8 +44,15 @@ second_func:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mov al, -128
-sub al, 2
+;mov al, -128
+;sub al, 2
+pushf
+pop rax
+mov rcx, 1
+shl rcx, 11
+or rax, rcx
+push rcx
+popf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,8 +68,16 @@ third_func:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mov al, -128
-add al, -128
+;mov al, -128
+;add al, -128
+pushf
+pop rax
+mov rcx, 1
+shl rcx, 11
+inc rcx
+or rax, rcx
+push rcx
+popf
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
