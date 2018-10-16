@@ -38,7 +38,6 @@ je equal
 mov rax, 0
 equal:
 mov rax, 1
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -184,4 +183,3 @@ jne begin
     xor rax, rax
     pop rbp
     ret
-
