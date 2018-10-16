@@ -1,6 +1,6 @@
 ;Name: Robert John Graham III
-;Date: 15 Oct 2018
-;Project: Lab 6
+;Date: 16 Oct 2018
+;Project: Lab 8
 ;
 ; vim: filetype=nasm :
 
