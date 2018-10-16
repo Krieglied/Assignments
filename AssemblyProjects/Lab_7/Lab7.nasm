@@ -25,9 +25,7 @@ first_func:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 cmp rdi, rsi
 je .equal
-jg .greater
 jl .lesser
-.greater:
 mov rax, 1
 jmp .end
 .lesser:
