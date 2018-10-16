@@ -68,9 +68,19 @@ second_func:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mov rax, 0
-mov rcx, 1 
-add rax, rdx
+push rdi
+xor rax, rax
+xor rcx, rcx
+.loop_start:
+cmp rcx, rsi
+jge .loop_end
+
+add ax, [rdi + rcx * 4]
+
+inc rcx
+jmp .loop_start
+.loop_end:
+pop rdi
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,11 +104,17 @@ third_func:
 ;  HINT: 
 ;  Just like with second_func, except now we are dealing with chars
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+xor rax, rax
+xor dl, dl
+.jump_start:
+cmp dl, [rdi + rax]
+je .jump_end
 
+inc rax
+jmp .jump_start
+.jump_end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     pop rbp
     ret
-
-
