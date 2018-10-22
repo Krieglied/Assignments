@@ -37,11 +37,20 @@ second_func:
 ; 
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-xor rax, rax
+xor eax, eax
+xor ebx, ebx
+xor ecx, ecx
+xor edx, edx
 cpuid
-mov rdi, [rsp + 4]
-stosb
-mov rax, rdi 
+;mov [rdi], ebx
+;mov [rdi + 4], edx
+;mov [rdi + 8], ecx
+mov eax, ebx
+stosd
+mov eax, edx
+stosd
+mov eax, ecx
+stosd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
