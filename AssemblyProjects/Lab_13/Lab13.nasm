@@ -53,6 +53,16 @@ ex_strlen:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : string buffer
+
+xor ecx, ecx
+xor eax, eax
+not ecx
+cld
+repne scasb
+not ecx
+mov eax, ecx
+dec eax
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
@@ -65,7 +75,13 @@ ex_memcpy:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : destination buffer
+;rsi : source buffer
+;rdx : length
+xor rcx, rcx
+mov rcx, rdx
 
+rep movsb
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,7 +94,15 @@ ex_memset:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : destination buffer
+;rsi : character to be initialize the buffer
+;rdx : length of the buffer
+xor rcx, rcx
+xor rax, rax
+mov rcx, rdx
+mov rax, rsi
 
+rep stosb
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,7 +114,24 @@ ex_memchr:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : buffer to be searched
+;rsi : value to search for
+;rdx : how many bytes to search
 
+xor rcx, rcx
+xor rax, rax
+mov rcx, rdx
+mov rax, rsi
+
+repne scasb
+jne .notfound
+lea rax, [rdi - 1]
+jmp .end
+
+.notfound:
+xor rax, rax
+
+.end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -102,7 +143,22 @@ ex_memcmp:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : input buffer 1
+;rsi : input buffer 2
+;rdx : provided length
 
+xor rcx, rcx
+mov rcx, rdx
+
+cld
+cmp rcx, rcx
+rep cmpsb
+je .set
+jmp .end
+
+.set:
+mov rax, 0
+.end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -110,9 +166,30 @@ ex_memcmp:
 
 ex_strchr:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;        const char * strchr ( const char * str, int character )
+;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;rdi : buffer to be searched
+;rsi : search character
+xor rax, rax
+push rdi
+mov rax, rdi
+call ex_strlen
+xor rcx, rcx
+mov rcx, rax
+pop rdi
+cld
+xor rax, rax
+mov rax, rsi
+repne scasb
+jne .set
+mov rax, rdi
+dec rax
+jmp .end
+.set:
+mov rax, 0
+.end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,9 +197,33 @@ ex_strchr:
 
 ex_strcmp:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;            int strcmp ( const char * str1, const char * str2 )
+;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : first string
+;rsi : second string
+xor rax, rax
+push rdi
+mov rax, rdi
+call ex_strlen
+xor rcx, rcx
+mov rcx, rax
+pop rdi
+cld
+cmp rcx, rcx
+rep cmpsb
+je .set
+jg .neg
+mov rax, 1
+jmp .end
 
+.neg:
+mov rax, -1
+jmp .end
+.set:
+mov rax, 0
+.end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -130,9 +231,26 @@ ex_strcmp:
 
 ex_strcpy:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;           char * strcpy ( char * destination, const char * source )
+;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;rdi : destination buffer
+;rsi : source buffer
+xor rax, rax
+xor r8, r8
+mov r8, rdi
+xor rdi, rdi
+mov rdi, rsi
+call ex_strlen
+xor rcx, rcx
+mov rcx, rax
+xor rdi, rdi
+mov rdi, r8
+cld
+cmp rcx, rcx
+repne movsb
+mov rax, rdi
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
