@@ -419,9 +419,26 @@ endstruc
 
  walk_list:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : pointer to struct of Nodes
+;rsi : function pointer
 
+.continue:
+xor rax, rax
+mov rax, [rdi + Node.Data]
+cmp rax, rsi
+je .end
+mov rdi, [rdi + Node.Next]
+cmp rdi, 0
+mov rax, 0
+je .end
+jmp .continue
+
+.end:
+ret
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -435,6 +452,63 @@ ex_isort:
 ;
 ;  BEGIN student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rdi : array of unsigned longs
+;rsi : size of array
+
+xor rax, rax ; key = 0
+xor rcx, rcx ; i = 0
+cmp rdi, 0   ; IF array == NULL
+je .end
+cmp rsi, 0   ; IF size == 0
+je .end
+
+xor rbx, rbx ; j = 0
+mov rbx, 1   ; j = 1
+.outer_loop:
+cmp rbx, rsi ; IF i == size
+je .end_outer_loop
+
+mov rcx, rbx ; i = j - 1
+dec rcx
+mov rax, [rdi + rbx] ; key = array[i]
+
+.inner_loop:
+cmp rcx, 0
+jl .end_inner_loop
+cmp rax, [rdi + rcx]
+jle .end_inner_loop
+xor rdx, rdx
+push rax
+xor rax, rax
+mov rax, 4
+mul rcx
+mov rdx, rdi
+add rdx, rax
+pop rax
+add rdx, 4
+push rax
+mov rax, [rdx - 4]
+mov [rdx], rax
+pop rax
+dec rcx
+jmp .end_inner_loop
+.end_inner_loop:
+
+xor rdx, rdx
+push rax
+xor rax, rax
+mov rax, 4
+mul rcx
+mov rdx, rdi
+add rdx, rax
+pop rax
+add rdx, 4
+mov [rdx], rax
+
+inc rbx
+jmp .outer_loop
+.end_outer_loop:
+.end:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
