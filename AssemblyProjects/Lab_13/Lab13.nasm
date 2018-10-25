@@ -347,21 +347,65 @@ ex_strstr:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;rdi : Full string buffer to be looked through 
 ;rsi : Needle string to be looked for
-.prep:
-xor rax, rax         ; Used at the start to compute length of string buffer
-call ex_strlen       ; Computes the length of string
-xor rcx, rcx
-;rax                 ; Length of string
+.prologue:
+xor rax, rax
+push rdi
+call ex_strlen    ; Length of buffer is now in rax
+xor r8, r8
+mov r8, rax       ; R8 = Length of buffer
+xor rax, rax
+mov rdi, rsi
+call ex_strlen    ; Length of needle is now in rax
+xor r9, r9
+mov r9, rax       ; R9 = Length of needle
+pop rdi           
 
-;Look for cmpsb of [rcx] for buffer and needle to be 0
+;rdi = should now point to start of string buffer
+;rsi = should now point to start of search needle
 
-.loop_string:
+xor rcx, rcx      ; rcx = (int i = 0
+.loop_buffer:
+cmp r8, rcx       ; is i == length.buffer
+je .end_notfound  ; i == length.buffer, goto end of loop, 
+                  ; and character is not found
+xor rbx, rbx      ; rbx = (int j = 0
+.loop_needle:
+cmp r9, rbx       ; is j == length.needle
+je .end_needle    ; j == length.needle, goto end of needle loop
+
+xor rax, rax
+xor rdx, rdx
 push rdi
 push rsi
-push rax
+add rdi, rcx
+add rdi, rbx      ; rdi == buffer[i + j]
+add rsi, rbx      ; rsi == needle[j]
+mov al, [rdi]
+mov dl, [rsi]
+pop rsi
+pop rdi
+cmp rax, rdx      ; compare buffer[i + j] ?= needle[j]
+jne .end_needle   ; Values are not equal, i needs to be incremented
+mov rax, rbx
+inc rax
+cmp rax, r9       ; is j + 1 == length.needle
+je .found         ; j + 1 == length.needle, so needle is in buffer
+                  ; rax == buffer[i] needs to be returned
+inc rbx           ; j++
+jmp .loop_needle
+.end_needle:
 
+inc rcx           ; i++
+jmp .loop_buffer
 
+.end_notfound:    ; The whole buffer has been searched, no result
+xor rax, rax      ; return 0
+jmp .end
 
+.found:           ; Needle has been found
+mov rax, rdi      ; return buffer[i] -> rdi + rcx
+add rax, rcx
+.end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  END student code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
