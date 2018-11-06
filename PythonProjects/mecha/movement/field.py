@@ -12,7 +12,7 @@ class Field(object):
                     print("|  "),
                 else:
                     if self.grid[x][y] in players:
-                        print("| {}").format(players.index(self.grid[x][y])),
+                        print("| {}").format(players.index(self.grid[x][y]) + 1),
                         self.players[self.grid[x][y]] = {x,y}
             print("|")
         for i in xrange(len(self.grid)):

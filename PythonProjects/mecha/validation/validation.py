@@ -19,5 +19,5 @@ def move_validation(choices):
     user_input = raw_input(":::")
     if (user_input.upper() not in choices):
         print("Invalid choice, please try again.")
-        user_input = move_validation()
+        user_input = move_validation(choices)
     return user_input
