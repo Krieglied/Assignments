@@ -455,14 +455,8 @@ ex_isort:
 ;rdi : array of unsigned longs
 ;rsi : size of array
 
-mov eax, dword [rdi]
-mov eax, dword [rdi + 4]
-mov eax, dword [rdi + 8]
-mov eax, dword [rdi + 12]
-mov eax, dword [rdi + 16]
-
-xor rax, rax ; key = 0
-xor rcx, rcx ; i = 0
+xor edx, edx ; key = 0
+xor cx, cx ; i = 0
 
 cmp rdi, 0   ; IF array == NULL
 je .end      ; return
@@ -470,55 +464,56 @@ je .end      ; return
 cmp rsi, 0   ; IF size == 0
 je .end      ; return
 
-xor rbx, rbx ; j = 0
-mov rbx, 1   ; int j = 1
+xor bx, bx ; j = 0
+mov bx, 1   ; int j = 1
 
 .outer_loop:
-cmp rbx, rsi        ; cmp j, size
+cmp bx, si        ; cmp j, size
 jge .end_outer_loop ; if j >= size, jmp
 
-mov rcx, rbx ; i = j - 1
-dec rcx
+mov cx, bx ; i = j - 1
+dec cx
 mov edx, dword [rdi + rbx * 4] ; key = array[j]
                          ; rdx = [rdi + rbx * 4]
 push rdx
 
 .inner_loop:
-cmp rcx, 0         ; cmp i, 0
-jl .end_inner_loop ; if i < 0, jmp to end of loop
-cmp rax, [rdi + rcx * 4] ; cmp key, array[i]
-jge .end_inner_loop  ; if key >= array[i], jmp to end of loop
+cmp cx, 0         ; cmp i, 0
+;jl .end_inner_loop ; if i < 0, jmp to end of loop
+;cmp edx, [rdi + rcx * 4] ; cmp key, array[i]
+;mov eax, dword [rdi + rcx * 4]
+;jge .end_inner_loop  ; if key >= array[i], jmp to end of loop
+;xor rax, rax
+;xor r8, r8   ; Will store array[i + 1]
+;mov r8, rdi  ; Stores &array
+;mov rax, 4
+;mul rcx      ; rax = rcx * 4
+;add r8, rax  ; r8 = rdi + rcx * 4
+;add r8, 4    ; r8 = rdi + (rcx + 1) * 4 or &array[(i + 1)]
+;mov eax, dword [rdi + rcx * 4] ; rax = array[i]
+;mov [r8], eax ; array[i + 1] = array[i]
+;mov eax, dword [rdi]
+;mov eax, dword [rdi + 4]
+;mov eax, dword [rdi + 8]
+;mov eax, dword [rdi + 12]
+;mov eax, dword [rdi + 16]
+;dec rcx      ; i--
+;jmp .inner_loop
+;.end_inner_loop:
 
-xor rax, rax
-xor r8, r8   ; Will store array[i + 1]
-mov r8, rdi  ; Stores &array
-mov rax, 4
-mul rcx      ; rax = rcx * 4
-add r8, rax  ; r8 = rdi + rcx * 4
-add r8, 4    ; r8 = rdi + (rcx + 1) * 4 or &array[(i + 1)]
-mov eax, dword [rdi + rcx * 4] ; rax = array[i]
-mov [r8], eax ; array[i + 1] = array[i]
-mov eax, dword [rdi]
-mov eax, dword [rdi + 4]
-mov eax, dword [rdi + 8]
-mov eax, dword [rdi + 12]
-mov eax, dword [rdi + 16]
-dec rcx      ; i--
-jmp .inner_loop
-.end_inner_loop:
+;xor rax, rax
+;xor r8, r8   ; Will store array[i + 1]
+;mov r8, rdi  ; stores &array
+;mov rax, 4   ; rax = 4
+;inc rcx
+;mul rcx      ; rax = (rcx + 1) * 4
+;add r8, rax  ; r8 = rdi + (rcx + 1) * 4
+;add r8, 4    ; r8 = rdi + (rcx + 1) * 4 or &array[(i + 1)]
+;pop rdx
+;mov [r8], rdx ; array[i + 1] = key
 
-xor rax, rax
-xor r8, r8   ; Will store array[i + 1]
-mov r8, rdi  ; stores &array
-mov rax, 4   ; rax = 4
-mul rcx      ; rax = rcx * 4
-add r8, rax  ; r8 = rdi + rcx * 4
-add r8, 4    ; r8 = rdi + (rcx + 1) * 4 or &array[(i + 1)]
-pop rdx
-mov [r8], rdx ; array[i + 1] = key
-
-inc rbx
-jmp .outer_loop
+;inc rbx
+;jmp .outer_loop
 .end_outer_loop:
 .end:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
