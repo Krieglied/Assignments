@@ -1,6 +1,6 @@
 import sympy
 
-primes = list(sympy.primerange(1137,7731))
+primes = list(sympy.primerange(aabc,ccba))
 for prime in primes:
     notprime = ['a','b','c','d','e','f','g']
     found = True
